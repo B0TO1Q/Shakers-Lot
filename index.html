@@ -454,6 +454,41 @@ html[data-device="desktop"] .kbd{display:inline-block}
   html:not([data-device="desktop"]) .toast{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 }
 @media (prefers-reduced-motion:no-preference){.spot rect{transition:fill .2s}}
+.xhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.xhead label.btn,.xtools label.btn{display:inline-flex;align-items:center;justify-content:center}
+.xnote{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:10px}
+.xnote h3{margin:0;font-size:19px}
+.xnote ol,.xnote ul{margin:0;padding-left:22px;display:grid;gap:4px}
+.xnote p{margin:0}
+.xchips{display:flex;flex-wrap:wrap;gap:8px}
+.xchips .chip{min-height:44px}
+.xtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.xcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.xcard{display:grid;gap:6px;align-content:start;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--line);border-radius:var(--r);padding:12px 14px;cursor:pointer}
+.xcard b{font-size:17px}
+.xtags{display:flex;flex-wrap:wrap;gap:6px}
+.xtag{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border-radius:999px;background:var(--bg);font-weight:700;font-size:13px}
+.xtag .sw{width:9px;height:9px;border-radius:50%}
+.xnums{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.xdemo{background:var(--keybg);color:var(--tipc);border-radius:999px;padding:2px 10px;font-weight:700;font-size:13px}
+.xcols{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.xcols select{width:100%;font-size:15px;min-height:46px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.arksub{font-size:15px;font-weight:500;color:var(--muted);margin-left:6px}
+.abar{height:12px;border-radius:999px;background:var(--asphalt);overflow:hidden}
+.abar span{display:block;height:100%;background:var(--s-demo);border-radius:999px}
+.acards{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}
+.acard{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+.acard.out{opacity:.7}
+.anum{width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:700;font-variant-numeric:tabular-nums}
+.acard b{font-size:17px}
+.aroute{font-size:15px;font-weight:600}
+.aroute span{color:var(--muted);font-weight:400}
+.abtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.abtns .btn{min-height:46px;font-size:15px}
+.apin[aria-pressed="true"]{border-color:var(--s-demo);color:var(--s-demo)}
+.asec{margin:6px 0 0;font-size:16px;color:var(--muted);font-weight:600}
+.chip.arkchip[aria-pressed="true"]{border-color:var(--s-demo);box-shadow:inset 0 0 0 1px var(--s-demo)}
+html[data-device="phone"] .xcards,html[data-device="phone"] .acards{grid-template-columns:1fr}
 </style>
 
 <div class="app">
@@ -533,6 +568,25 @@ html[data-device="desktop"] .kbd{display:inline-block}
     <div class="gcards" id="gCards"></div>
     <input id="g_file" type="file" accept="image/*" capture="environment" class="vh">
   </div>
+
+  <div id="checkView" class="view" hidden>
+    <div class="listhead"><h2>vAuto check</h2>
+      <div class="xhead"><button class="btn" id="xSetBtn" type="button">Settings</button><label class="btn primary" for="x_file">Import vAuto export</label></div>
+    </div>
+    <input id="x_file" type="file" accept=".csv,.txt,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" class="vh">
+    <section class="gsetup" id="xSet" hidden>
+      <h3>Check settings</h3>
+      <div class="grid2"><label>Flag cars with fewer photos than<input id="xs_photoMin" inputmode="numeric" autocomplete="off"></label><label>Flag cars in stock this many days or more<input id="xs_ageDays" inputmode="numeric" autocomplete="off"></label></div>
+      <div id="xCols"></div>
+      <div class="actions"><button class="btn danger" id="xClear" type="button">Remove imported list</button><button class="btn primary" id="xs_save" type="button">Save settings</button></div>
+    </section>
+    <div id="xBody"></div>
+  </div>
+
+  <div id="arkView" class="view" hidden>
+    <div class="listhead"><h2>The Ark <small class="arksub">Storm lockdown</small></h2><div class="xhead" id="aHeadBtns"></div></div>
+    <div id="aBody"></div>
+  </div>
   </main>
 </div>
 
@@ -541,6 +595,7 @@ html[data-device="desktop"] .kbd{display:inline-block}
   <button type="button" id="vList" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>List</button>
   <button type="button" id="vKeys" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="m10.8 12.2 8.7-8.7M17 6l2 2M15 8l2 2"/></svg>Keys<span class="dbadge" id="keysBadge" hidden></span></button>
   <button type="button" id="vGuides" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7Z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></svg>Guides<span class="dbadge" id="guidesBadge" hidden></span></button>
+  <button type="button" id="vCheck" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"/></svg>Check<span class="dbadge" id="checkBadge" hidden></span></button>
   <button type="button" id="tipsBtn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg>Tips</button>
   <button type="button" id="open3d" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg>3D</button>
   <button type="button" id="labelsBtn" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/></svg>Labels</button>
@@ -1111,12 +1166,14 @@ function matches(v){
   if(keyFilter && !v.keys)return false;
   if(lowFilter && !isLow(v))return false;
   if(guideFilter && !(isUsed(v)&&!v.guidePhoto))return false;
+  if(checkFilter && !checkKeys.has(vKey(v)))return false;
   if(!filter)return true;
   return [v.stock,v.desc,v.color,v.vin,v.note].join(" ").toLowerCase().includes(filter);
 }
 const label5=(v,n)=>(v.stock||v.vin||"•").slice(-n);
 function paint(){
-  const active=!!(filter||statusFilter||tipMode||keyFilter||lowFilter||guideFilter);
+  renderCheckLight();
+  const active=!!(filter||statusFilter||tipMode||keyFilter||lowFilter||guideFilter||checkFilter);
   SPOTS.forEach(s=>{
     const v=data[s.id], col=v?`var(${(ST[v.status]||ST.avail).c})`:"var(--s-empty)";
     const hit=active&&matches(v);
@@ -1149,7 +1206,7 @@ function paint(){
   if(zoomed)setTitle();
   if(tipMode)renderTips();
   if(three.ready&&three.open)three.cars();
-  renderStats(); renderList(); renderKeysLight(); renderGuidesLight();
+  renderStats(); renderList(); renderKeysLight(); renderGuidesLight(); renderArkLight();
 }
 function w2c(s){const long=Math.max(s.w,s.h);return Math.max(3,Math.floor((long-4)/4.4))}
 function renderStats(){
@@ -1174,6 +1231,11 @@ function renderStats(){
   if(staff){const h=document.createElement("span");h.className="chip";h.style.cursor="default";h.innerHTML=`<span class="sw" style="background:var(--staff);border:1.5px dashed var(--muted)"></span>Employee & service lot <b>${staff}</b>`;box.appendChild(h)}
   if(inShop){const h=document.createElement("span");h.className="chip";h.style.cursor="default";h.innerHTML=`<span class="sw" style="background:var(--lift)"></span>In the shop <b>${inShop}</b>`;box.appendChild(h)}
   if(held){const h=document.createElement("span");h.className="chip";h.style.cursor="default";h.innerHTML=`<span class="sw" style="border:1.5px dashed var(--muted)"></span>In holding <b>${held}</b>`;box.appendChild(h)}
+  if(checkFilter){const k=document.createElement("button");k.className="chip";k.type="button";k.setAttribute("aria-pressed","true");
+   k.innerHTML=`<span class="sw" style="background:var(--s-hold)"></span>vAuto flags on map <b>${checkKeys.size}</b>`;k.title="Tap to stop showing vAuto flags";k.onclick=()=>{checkFilter=false;paint()};box.prepend(k);}
+  {const inN=Object.values(data).filter(v=>v.arkFrom).length, k=document.createElement("button");k.className="chip arkchip";k.type="button";k.setAttribute("aria-pressed",String(!!ark.on||inN>0));
+   k.innerHTML=`<span class="sw" style="background:var(--s-demo)"></span>${ark.on?`Ark on · <b>${inN}</b> inside`:inN?`All clear · <b>${inN}</b> to move out`:"Storm coming? The Ark"}`;k.onclick=()=>{if(zoomed)unzoom();showView("ark")};
+   if(ark.on||inN)box.prepend(k);else box.appendChild(k);}
   STATUS.forEach(s=>{
     const b=document.createElement("button");
     b.className="chip";b.type="button";b.setAttribute("aria-pressed",String(statusFilter===s.k));
@@ -1186,7 +1248,7 @@ function esc(t){return String(t??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt
 function spotName(id){if(isHold(id))return "Holding "+id.slice(2);const s=spotById[id];if(s&&s.zone.unit)return s.zone.unit+" "+s.i;if(s&&s.zone.name){const n=s.zone.name.replace(/^Z\d+ /,"");return n.charAt(0)+n.slice(1).toLowerCase()+" "+s.i}return s?s.zone.id+" · "+s.i:id}
 function renderList(){
   const order=Object.fromEntries(SPOTS.map((s,i)=>[s.id,i]));
-  const ids=Object.keys(data).filter(id=>!(filter||statusFilter||keyFilter||lowFilter||guideFilter)||matches(data[id])).sort((a,b)=>(order[a]??1e9)-(order[b]??1e9));
+  const ids=Object.keys(data).filter(id=>!(filter||statusFilter||keyFilter||lowFilter||guideFilter||checkFilter)||matches(data[id])).sort((a,b)=>(order[a]??1e9)-(order[b]??1e9));
   const box=$("list");
   if(!ids.length){
     box.innerHTML=`<div class="empty">${Object.keys(data).length?"No vehicles match that search.":"No vehicles logged yet. Tap a zone on the map, then tap a spot to add the first one."}</div>`;
@@ -1432,7 +1494,7 @@ $("sheet").addEventListener("submit",async e=>{
   e.preventDefault(); if(readOnly)return;
   const v={stock:$("f_stock").value.trim(),desc:$("f_desc").value.trim(),color:$("f_color").value.trim(),vin:$("f_vin").value.trim().toUpperCase(),msrp:$("f_msrp").value.trim(),miles:numOnly($("f_miles").value),range:numOnly($("f_range").value),note:$("f_note").value.trim(),status:pickStatus,updatedAt:Date.now()};
   const old=data[editing]||{};
-  ["keys","gmode","guidePrinted"].forEach(k=>{if(old[k]!=null)v[k]=old[k]});
+  ["keys","gmode","guidePrinted","arkFrom"].forEach(k=>{if(old[k]!=null)v[k]=old[k]});
   ["photo","guidePhoto","guideAt"].forEach(k=>{const x=sheetPh[k]||old[k];if(x)v[k]=x});
   v.cond=pickCond||(isUsed(v)?"used":"new");
   if(!v.stock&&!v.desc&&!v.vin){toast("Add a stock #, VIN or vehicle first");return}
@@ -1979,14 +2041,16 @@ $("f_range").addEventListener("input",syncFuel);
 $("f_miles").addEventListener("blur",()=>{const n=numOnly($("f_miles").value);$("f_miles").value=fmtNum(n)});
 
 // ---------- Views (Map / List) ----------
+const VIEWS=[["map","vMap"],["list","vList"],["keys","vKeys"],["guides","vGuides"],["check","vCheck"],["ark",null]];
 function showView(v){
-  $("mapView").hidden=v!=="map"; $("listView").hidden=v!=="list"; $("keysView").hidden=v!=="keys"; $("guidesView").hidden=v!=="guides";
-  $("vMap").setAttribute("aria-pressed",String(v==="map")); $("vList").setAttribute("aria-pressed",String(v==="list")); $("vKeys").setAttribute("aria-pressed",String(v==="keys")); $("vGuides").setAttribute("aria-pressed",String(v==="guides"));
+  VIEWS.forEach(([k,b])=>{$(k+"View").hidden=v!==k;if(b)$(b).setAttribute("aria-pressed",String(v===k))});
   if(v==="keys")renderKeys();
   if(v==="guides")renderGuides();
+  if(v==="check")renderCheck();
+  if(v==="ark")renderArk();
   const cur=$(v+"View"); if(cur)cur.scrollTop=0;
 }
-$("vMap").onclick=()=>showView("map"); $("vList").onclick=()=>showView("list"); $("vKeys").onclick=()=>showView("keys"); $("vGuides").onclick=()=>showView("guides");
+$("vMap").onclick=()=>showView("map"); $("vList").onclick=()=>showView("list"); $("vKeys").onclick=()=>showView("keys"); $("vGuides").onclick=()=>showView("guides"); $("vCheck").onclick=()=>showView("check");
 
 
 // ---------- Photos & Buyers Guides ----------
@@ -2255,6 +2319,324 @@ document.addEventListener("keydown",e=>{
   else if(zoomed&&k==="arrowleft")stepZone(-1);
 });
 
+
+// ---------- vAuto check ----------
+// Compares the daily vAuto inventory export (CSV or Excel) against the lot map and flags what needs attention.
+// No API: someone exports the list from vAuto and imports the file here. The imported list stays in this
+// browser only (localStorage). It is never written to the shared map, except the "Fill in blanks" button,
+// which copies stock #, vehicle, color, VIN and mileage onto matched cars that are missing them.
+// Dealer cost and other columns are never kept: only the columns listed in VF are read.
+const LSV="shakers-vauto-v1", LSVS="shakers-vauto-set-v1", LSVM="shakers-vauto-map-v1";
+let vx=null; try{vx=JSON.parse(localStorage.getItem(LSV)||"null")}catch(e){}
+let vset={photoMin:20,ageDays:45}; try{vset={...vset,...JSON.parse(localStorage.getItem(LSVS)||"{}")}}catch(e){}
+let vxRaw=null, checkFilter=false, checkShow="all", checkKeys=new Set(), xlsxLib=null, lastCheck=[];
+const VIN_RE=/^[A-HJ-NPR-Z0-9]{17}$/;
+const normH=s=>String(s??"").toLowerCase().replace(/[^a-z0-9]/g,"");
+const num=s=>{if(s==null||s==="")return null;const x=parseFloat(String(s).replace(/[^0-9.\-]/g,""));return isNaN(x)?null:x};
+const vKey=v=>{const vin=String(v&&v.vin||"").toUpperCase().trim();if(vin)return "V:"+vin;const s=String(v&&v.stock||"").toUpperCase().trim();return s?"S:"+s:""};
+// field, label, header test (header lowercased with spaces and symbols removed)
+const VF=[
+  ["vin","VIN",h=>/^vin|vin$/.test(h)],
+  ["stock","Stock #",h=>/^(stock|stk)/.test(h)],
+  ["vehicle","Vehicle",h=>/^(vehicle|description|desc|ymm|yearmakemodel)/.test(h)],
+  ["year","Year",h=>/^(year|yr|modelyear)$/.test(h)],
+  ["make","Make",h=>/^make/.test(h)],
+  ["model","Model",h=>/^(model|modelname)$/.test(h)],
+  ["trim","Trim",h=>/^(trim|series|style)/.test(h)],
+  ["color","Color",h=>/color|^ext/.test(h)&&!/^int/.test(h)],
+  ["miles","Odometer",h=>/odom|^miles|mileage/.test(h)],
+  ["age","Days in stock",h=>/^age|daysin|^days|^dis$|inventoryage/.test(h)],
+  ["photos","Photo count",h=>/photo|pics|picture|image/.test(h)],
+  ["price","Price",h=>/price/.test(h)&&!/cost|book|market|guide|msrp|invoice/.test(h)],
+];
+const VFL=Object.fromEntries(VF.map(([k,l])=>[k,l]));
+const FLAGS={
+  lost:   {l:"Not found on the lot",  c:"--s-hold", tip:"In vAuto but not on the map. In transit, out at the body shop, or not logged on the map yet."},
+  missing:{l:"Not in vAuto",          c:"--s-sold", tip:"On the lot but not in the export. A new arrival, or never entered in vAuto."},
+  photos: {l:"Needs photos",          c:"--tipc",   tip:"Fewer photos than your minimum. These cars sell worse online."},
+  aging:  {l:"Aging",                 c:"--s-svc",  tip:"In stock a long time. Good candidates for a price change or a feature spot."},
+  price:  {l:"No price",              c:"--keyc",   tip:"Listed with no price. Most sites push these to the bottom."},
+  sold:   {l:"Sold here, still in vAuto",c:"--s-demo",tip:"Marked Sold on the map but still in the vAuto list. It may still be advertised."},
+  guide:  {l:"No Buyers Guide photo", c:"--lowc",   tip:"Used car with no photo of its Buyers Guide in the window."},
+};
+
+function parseCsv(t,d){
+  const rows=[];let row=[],f="",q=false;
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
+    else if(c==='"')q=true;
+    else if(c===d){row.push(f);f=""}
+    else if(c==="\n"||c==="\r"){if(c==="\r"&&t[i+1]==="\n")i++;row.push(f);rows.push(row);row=[];f=""}
+    else f+=c}
+  if(f||row.length){row.push(f);rows.push(row)}
+  return rows.filter(r=>r.some(x=>String(x).trim()));
+}
+function loadXlsx(){return window.XLSX?Promise.resolve():(xlsxLib||(xlsxLib=loadScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js").catch(e=>{xlsxLib=null;throw e})))}
+async function fileRows(file){
+  if(/\.xlsx?$/i.test(file.name)){
+    await loadXlsx();
+    const wb=XLSX.read(await file.arrayBuffer(),{type:"array"}), ws=wb.Sheets[wb.SheetNames[0]];
+    return XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:""}).filter(r=>r.some(x=>String(x).trim()));
+  }
+  const t=(await file.text()).replace(/^﻿/,""), first=t.split(/\r?\n/,1)[0];
+  return parseCsv(t,first.split("\t").length>first.split(",").length?"\t":",");
+}
+// vAuto reports can start with title lines; the header is the row that names the most known columns
+function findHeader(rows){let best=-1,bi=0;rows.slice(0,15).forEach((r,i)=>{const hs=r.map(normH);const n=VF.filter(([,,t])=>hs.some(h=>h&&t(h))).length;if(n>best){best=n;bi=i}});return bi}
+function autoMap(hdr,body){
+  const hs=hdr.map(normH), used=new Set(), m={};
+  VF.forEach(([k,,t])=>{const i=hs.findIndex((h,j)=>!used.has(j)&&h&&t(h));if(i>=0){m[k]=i;used.add(i)}});
+  if(m.vin==null){const i=hdr.findIndex((_,j)=>!used.has(j)&&body.slice(0,25).filter(r=>VIN_RE.test(String(r[j]||"").trim().toUpperCase())).length>=Math.min(3,body.length));if(i>=0)m.vin=i}
+  return m;
+}
+function normRows(body,map){
+  const g=(r,k)=>map[k]!=null&&map[k]!==""?String(r[map[k]]??"").trim():"";
+  return body.map(r=>{const o={};VF.forEach(([k])=>{const x=g(r,k);if(x)o[k]=x});
+    if(o.vin)o.vin=o.vin.toUpperCase().replace(/[^A-Z0-9]/g,"");
+    if(o.stock)o.stock=o.stock.toUpperCase();
+    return o}).filter(o=>(o.vin&&o.vin.length>=8)||(o.stock&&!/total/i.test(o.stock)));
+}
+function setVx(rows,cols,file,demo){
+  vx={at:Date.now(),file,rows,cols,demo:!!demo};
+  try{localStorage.setItem(LSV,JSON.stringify(vx))}catch(e){toast("This device is out of room for the import")}
+  checkFilter=false; checkShow="all"; paint(); renderCheck();
+}
+async function importVauto(file){
+  toast("Reading "+file.name+"…");
+  let rows; try{rows=await fileRows(file)}catch(e){toast("Couldn't read that file. Export it as CSV and try again.");return}
+  if(rows.length<2){toast("That file looks empty");return}
+  const hi=findHeader(rows), hdr=rows[hi].map(x=>String(x??"").trim()), body=rows.slice(hi+1);
+  const sig=hdr.map(normH).join("|"); let map=null;
+  try{const s=JSON.parse(localStorage.getItem(LSVM)||"{}");if(s.sig===sig)map=s.map}catch(e){}
+  if(!map)map=autoMap(hdr,body);
+  vxRaw={hdr,body,sig,map};
+  if(map.vin==null&&map.stock==null){$("xSet").hidden=false;renderCols();toast("Pick the VIN or Stock # column in Settings");return}
+  setVx(normRows(body,map),Object.keys(map).filter(k=>map[k]!=null&&map[k]!==""),file.name,false);
+  toast(`Imported ${vx.rows.length} cars from vAuto`);
+}
+$("x_file").addEventListener("change",e=>{const f=e.target.files&&e.target.files[0];e.target.value="";if(f)importVauto(f)});
+function renderCols(){
+  const box=$("xCols");
+  if(!vxRaw){box.innerHTML=vx?`<p class="meta" style="margin:0">Columns read from the last import: ${esc(vx.cols.map(k=>VFL[k]).join(", "))}. To change them, import the file again and open Settings.</p>`:"";return}
+  const opts=i=>`<option value="">Not in this file</option>`+vxRaw.hdr.map((h,j)=>`<option value="${j}"${String(i)===String(j)?" selected":""}>${esc(h||"Column "+(j+1))}</option>`).join("");
+  box.innerHTML=`<div class="meta" style="font-weight:600;margin-bottom:6px">Columns in ${esc(vx&&!vx.demo?vx.file:"your file")}</div><div class="xcols">${VF.map(([k,l])=>`<label>${l}<select data-col="${k}">${opts(vxRaw.map[k])}</select></label>`).join("")}</div>`;
+}
+$("xCols").addEventListener("change",e=>{const s=e.target.closest("[data-col]");if(!s||!vxRaw)return;
+  const m={...vxRaw.map}; if(s.value==="")delete m[s.dataset.col]; else m[s.dataset.col]=+s.value; vxRaw.map=m;
+  try{localStorage.setItem(LSVM,JSON.stringify({sig:vxRaw.sig,map:m}))}catch(_){}
+  if(m.vin==null&&m.stock==null)return;
+  setVx(normRows(vxRaw.body,m),Object.keys(m),vx&&!vx.demo?vx.file:"vAuto export",false); $("xSet").hidden=false; renderCols();
+});
+$("xSetBtn").onclick=()=>{const p=$("xSet");p.hidden=!p.hidden;$("xs_photoMin").value=vset.photoMin;$("xs_ageDays").value=vset.ageDays;renderCols()};
+$("xs_save").onclick=()=>{vset={photoMin:numOnly($("xs_photoMin").value)??20,ageDays:numOnly($("xs_ageDays").value)??45};try{localStorage.setItem(LSVS,JSON.stringify(vset))}catch(e){}$("xSet").hidden=true;paint();renderCheck();toast("Settings saved on this device")};
+$("xClear").onclick=()=>{vx=null;vxRaw=null;checkFilter=false;try{localStorage.removeItem(LSV)}catch(e){}$("xSet").hidden=true;paint();renderCheck();toast("Imported list removed from this device")};
+
+function lotIndex(){
+  const byVin={},byStock={},by8={};
+  Object.entries(data).forEach(([id,v])=>{if(!spotById[id])return;
+    const vin=String(v.vin||"").toUpperCase().trim(); if(vin){byVin[vin]=id;if(vin.length>=8)by8[vin.slice(-8)]=id}
+    const s=String(v.stock||"").toUpperCase().trim(); if(s)byStock[s]=id});
+  return {byVin,byStock,by8};
+}
+function runCheck(){
+  if(!vx)return [];
+  const ix=lotIndex(), seen=new Set(), has=k=>vx.cols.includes(k), out=[];
+  vx.rows.forEach((r,i)=>{
+    const id=(r.vin&&ix.byVin[r.vin])||(r.stock&&ix.byStock[r.stock])||(r.vin&&r.vin.length>=8&&ix.by8[r.vin.slice(-8)])||null;
+    if(id)seen.add(id);
+    const v=id?data[id]:null, f=[], age=num(r.age), ph=num(r.photos), pr=num(r.price);
+    if(!id)f.push("lost");
+    if(has("photos")&&(ph==null||ph<vset.photoMin)&&!(v&&v.status==="sold"))f.push("photos");
+    if(age!=null&&age>=vset.ageDays)f.push("aging");
+    if(has("price")&&!pr)f.push("price");
+    if(v&&v.status==="sold")f.push("sold");
+    if(id&&missingGuide(id,v))f.push("guide");
+    out.push({id,r,v,f,age,ph,pr});
+  });
+  Object.entries(data).forEach(([id,v])=>{
+    if(seen.has(id)||!spotById[id]||isStaff(id)||v.status==="sold"||v.status==="demo")return;
+    if(isShop(id)&&v.status==="svc")return; // customer cars in for service
+    out.push({id,r:null,v,f:["missing"],age:null,ph:null,pr:null});
+  });
+  return out;
+}
+const vxPrice=v=>{if(!vx)return null;const k=vKey(v);const r=vx.rows.find(r=>(r.vin&&"V:"+r.vin===k)||(r.stock&&"S:"+r.stock===k));return r?num(r.price):null};
+function checkDesc(x){const r=x.r||{},v=x.v||{};return v.desc||r.vehicle||[r.year,r.make,r.model,r.trim].filter(Boolean).join(" ")}
+function renderCheckLight(){
+  lastCheck=runCheck();
+  const flagged=lastCheck.filter(x=>x.f.length);
+  checkKeys=new Set(flagged.filter(x=>x.id&&(checkShow==="all"||x.f.includes(checkShow))).map(x=>vKey(x.v)).filter(Boolean));
+  const b=$("checkBadge"); b.hidden=!flagged.length; b.textContent=flagged.length; b.style.background="var(--s-hold)";
+  if(!$("checkView").hidden)renderCheck();
+}
+function renderCheck(){
+  const box=$("xBody");
+  if(!vx){
+    box.innerHTML=`<div class="xnote"><h3>Check the lot against vAuto</h3>
+      <ol><li>In vAuto, open your inventory list and export it (CSV or Excel).</li><li>Tap <b>Import vAuto export</b> and pick the file.</li><li>Fix what's flagged: cars missing photos, cars that can't be found, cars sitting too long.</li></ol>
+      <p class="meta">The imported list stays on this device. It isn't shared or sent anywhere, and dealer cost columns are never read. No vAuto login or API needed.</p>
+      <div class="xtools"><label class="btn primary" for="x_file">Import vAuto export</label><button class="btn" type="button" id="xDemo">Try it with demo data</button></div></div>`;
+    $("xDemo").onclick=loadDemo; return;
+  }
+  const all=lastCheck, flagged=all.filter(x=>x.f.length), inV=all.filter(x=>x.r), matched=inV.filter(x=>x.id).length;
+  const counts={}; flagged.forEach(x=>x.f.forEach(k=>counts[k]=(counts[k]||0)+1));
+  const when=new Date(vx.at), today=when.toDateString()===new Date().toDateString();
+  let list=checkShow==="all"?flagged:flagged.filter(x=>x.f.includes(checkShow));
+  if(filter)list=list.filter(x=>[x.r&&x.r.stock,x.r&&x.r.vin,checkDesc(x),x.v&&x.v.stock,x.v&&x.v.color].join(" ").toLowerCase().includes(filter));
+  const order=["lost","missing","photos","price","sold","guide","aging"];
+  list.sort((a,b)=>Math.min(...a.f.map(k=>order.indexOf(k)))-Math.min(...b.f.map(k=>order.indexOf(k)))||(b.age||0)-(a.age||0));
+  const fill=fillPlan();
+  const miss=[]; if(!vx.cols.includes("photos"))miss.push("photo count"); if(!vx.cols.includes("age"))miss.push("days in stock"); if(!vx.cols.includes("price"))miss.push("price");
+  box.innerHTML=`<p class="meta" style="margin:0">${vx.demo?'<span class="xdemo">Demo data</span> ':""}${esc(vx.demo?"Made-up vAuto numbers for your map cars":vx.file)} · imported ${esc(fmtTime(vx.at))}${today?"":' · <b style="color:var(--tipc)">not today\'s list</b>'} · ${inV.length} in vAuto · ${matched} found on the lot</p>
+    ${miss.length?`<p class="meta" style="margin:0">This file has no ${esc(miss.join(", "))} column, so ${miss.length>1?"those checks are":"that check is"} off. Add the column to the vAuto report, or pick it in Settings.</p>`:""}
+    <div class="xchips"><button class="chip" type="button" data-show="all" aria-pressed="${checkShow==="all"}">Everything flagged <b>${flagged.length}</b></button>${
+      order.filter(k=>counts[k]).map(k=>`<button class="chip" type="button" data-show="${k}" aria-pressed="${checkShow===k}" title="${esc(FLAGS[k].tip)}"><span class="sw" style="background:var(${FLAGS[k].c})"></span>${FLAGS[k].l} <b>${counts[k]}</b></button>`).join("")}</div>
+    ${checkShow!=="all"?`<p class="meta" style="margin:0">${esc(FLAGS[checkShow].tip)}</p>`:""}
+    <div class="xtools"><button class="btn" type="button" id="xMap" aria-pressed="${checkFilter}">${checkFilter?"Showing on the map":"Show on the map"}</button><button class="btn" type="button" id="xExport">Export list</button>${fill.length&&!readOnly?`<button class="btn" type="button" id="xFill">Fill in blanks on ${fill.length} car${fill.length>1?"s":""}</button>`:""}${vx.demo?'<button class="btn" type="button" id="xDemoOff">Clear demo</button>':""}</div>
+    <div class="xcards">${list.length?list.map(x=>{const v=x.v||{},r=x.r||{},c=FLAGS[x.f[0]].c;
+      return `<div class="xcard" style="border-left-color:var(${c})" ${x.id?`data-open="${esc(x.id)}" role="button" tabindex="0"`:""}>
+        <b>${esc(r.stock||v.stock||"No stock #")}</b>
+        <div class="meta">${esc(checkDesc(x)||"Vehicle not listed")}${v.color||r.color?" · "+esc(v.color||r.color):""}</div>
+        <div class="xtags">${x.f.map(k=>`<span class="xtag"><span class="sw" style="background:var(${FLAGS[k].c})"></span>${FLAGS[k].l}</span>`).join("")}</div>
+        <div class="xnums"><span>${x.id?"📍 "+esc(spotName(x.id)):"Not on the map"}</span>${x.age!=null?`<span>${x.age} day${x.age===1?"":"s"}</span>`:""}${x.ph!=null?`<span>${x.ph} photo${x.ph===1?"":"s"}</span>`:""}${x.r&&vx.cols.includes("price")?`<span>${x.pr?"$"+Math.round(x.pr).toLocaleString():"No price"}</span>`:""}</div>
+      </div>`}).join(""):`<div class="empty" style="grid-column:1/-1;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)">${flagged.length?"Nothing flagged matches that search.":"Nothing flagged. The lot and vAuto agree."}</div>`}</div>`;
+  box.querySelector(".xchips").onclick=e=>{const b=e.target.closest("[data-show]");if(!b)return;checkShow=b.dataset.show;renderCheckLight();if(checkFilter)paint();else renderCheck()};
+  $("xMap").onclick=()=>{checkFilter=!checkFilter;paint();if(checkFilter){showView("map");toast("Flagged cars are lit up on the map")}};
+  $("xExport").onclick=()=>saveCsv(`vauto-check-${new Date().toISOString().slice(0,10)}.csv`,[["Flags","Stock #","VIN","Vehicle","Color","Spot","Days in stock","Photos","Price"],
+    ...list.map(x=>{const r=x.r||{},v=x.v||{};return [x.f.map(k=>FLAGS[k].l).join("; "),r.stock||v.stock,r.vin||v.vin,checkDesc(x),v.color||r.color,x.id?spotName(x.id):"Not on the map",x.age??"",x.ph??"",x.pr??""]})]);
+  if($("xFill"))$("xFill").onclick=fillBlanks;
+  if($("xDemoOff"))$("xDemoOff").onclick=()=>$("xClear").click();
+}
+$("xBody").addEventListener("click",e=>{const c=e.target.closest("[data-open]");if(!c)return;const id=c.dataset.open,s=spotById[id];showView("map");if(s&&!s.zone.holding)zoomTo(s.zone,()=>openSheet(id));else openSheet(id)});
+$("xBody").addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.dataset&&e.target.dataset.open){e.preventDefault();e.target.click()}});
+// copy vAuto details onto matched map cars, only where the map field is blank
+function fillPlan(){
+  if(!vx||vx.demo)return [];
+  return lastCheck.filter(x=>x.id&&x.r).map(x=>{const v=x.v,r=x.r,p={};
+    if(!v.stock&&r.stock)p.stock=r.stock;
+    if(!v.vin&&r.vin&&VIN_RE.test(r.vin))p.vin=r.vin;
+    const d=checkDesc({r});if(!v.desc&&d)p.desc=d;
+    if(!v.color&&r.color)p.color=r.color;
+    if((v.miles==null||v.miles==="")&&num(r.miles)!=null)p.miles=Math.round(num(r.miles));
+    return Object.keys(p).length?[x.id,p]:null}).filter(Boolean);
+}
+async function fillBlanks(){
+  if(readOnly)return; const plan=fillPlan(); if(!plan.length)return;
+  const now=Date.now(); const d={...data}; plan.forEach(([id,p])=>{d[id]={...d[id],...p,updatedAt:now}}); data=d; paint();
+  for(const [id] of plan)await persist(id,data[id]);
+  toast(`Filled in ${plan.length} car${plan.length>1?"s":""} from vAuto`);
+}
+function loadDemo(){
+  const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+  const cars=Object.entries(data).filter(([id,v])=>spotById[id]&&!isStaff(id)&&v.status!=="demo"&&(v.stock||v.vin));
+  const rows=cars.slice(0,Math.max(0,cars.length-2)).map(([id,v])=>({vin:String(v.vin||"").toUpperCase(),stock:String(v.stock||"").toUpperCase(),vehicle:v.desc||"",color:v.color||"",
+    age:String(rnd(1,90)),photos:String(Math.random()<.25?rnd(0,8):rnd(24,40)),price:Math.random()<.08?"":String(+String(v.msrp||"").replace(/[^\d]/g,"")||rnd(18,62)*1000)}));
+  [["DEMO101","2024 Ford Explorer XLT","Carbonized Gray"],["DEMO102","2023 Lincoln Corsair Reserve","Pristine White"],["DEMO103","2022 Ford F-150 Lariat","Agate Black"]]
+    .forEach(([s,d,c])=>rows.push({stock:s,vehicle:d,color:c,age:String(rnd(3,70)),photos:String(rnd(0,30)),price:String(rnd(25,55)*1000)}));
+  rows.forEach(r=>Object.keys(r).forEach(k=>{if(r[k]==="")delete r[k]}));
+  setVx(rows,["vin","stock","vehicle","color","age","photos","price"],"Demo data",true);
+  toast("Demo loaded. Nothing was changed on the map.");
+}
+
+// ---------- The Ark: storm lockdown ----------
+// Before a big snow or storm, load as many cars as will fit into the building, most valuable first.
+// Indoor spots: shop bays, detail bays, showroom and service drive (filled in that order, so the
+// drive lanes by the door go last and come out first). Each car moved in carries arkFrom, the spot it
+// came from, so "All clear" can send it back. The Ark on/off state is shared with everyone on the map.
+const LSA="shakers-ark-v1";
+let ark={on:false,since:0,skip:[],pin:[]}; try{ark={...ark,...JSON.parse(localStorage.getItem(LSA)||"{}")}}catch(e){}
+const ARK_ORDER=["SH","DT","SR","SD"];
+const isInside=id=>{const s=spotById[id];return !!s&&ARK_ORDER.includes(s.zone.id)};
+async function saveArk(){
+  try{localStorage.setItem(LSA,JSON.stringify(ark))}catch(e){}
+  if(db){try{await db.doc("settings/ark").set(ark)}catch(err){handleErr(err)}}
+}
+function arkFree(){return SPOTS.filter(s=>ARK_ORDER.includes(s.zone.id)&&!data[s.id]&&!isRsv(s)).sort((a,b)=>ARK_ORDER.indexOf(a.zone.id)-ARK_ORDER.indexOf(b.zone.id)||a.i-b.i)}
+function arkValue(v){return num(v.msrp)||vxPrice(v)||0}
+function arkPlan(){
+  const cands=Object.entries(data).filter(([id,v])=>spotById[id]&&!isInside(id)&&!isStaff(id)&&!v.arkFrom);
+  const pin=new Set(ark.pin||[]), skip=new Set(ark.skip||[]);
+  const score=([id,v])=>(pin.has(vKey(v))?1e9:0)+(v.status==="sold"?5e8:0)+arkValue(v)+(yearOf(v)||vinYearOf(v.vin)||0);
+  const ranked=cands.filter(([,v])=>!skip.has(vKey(v))).sort((a,b)=>score(b)-score(a));
+  const free=arkFree();
+  return {go:ranked.slice(0,free.length).map(([id,v],i)=>({id,v,to:free[i].id})),wait:ranked.slice(free.length),skipped:cands.filter(([,v])=>skip.has(vKey(v))),free:free.length,
+    inside:Object.entries(data).filter(([,v])=>v.arkFrom),room:SPOTS.filter(s=>ARK_ORDER.includes(s.zone.id)&&!isRsv(s)).length};
+}
+async function arkMove(from,to,arkFrom){
+  const a=data[from]; if(!a||data[to]||readOnly)return false;
+  const va={...a,updatedAt:Date.now()}; if(arkFrom)va.arkFrom=arkFrom; else delete va.arkFrom;
+  const d={...data,[to]:va}; delete d[from]; data=d; paint();
+  await persist(to,va); await persist(from,null); return true;
+}
+function backSpot(id,v){
+  const home=v.arkFrom;
+  if(home&&spotById[home]&&!data[home])return home;
+  const z=home&&spotById[home]?spotById[home].zone:null;
+  const near=z&&z.spots.find(s=>!data[s.id]&&!isRsv(s)); if(near)return near.id;
+  const h=SPOTS.find(s=>s.zone.holding&&!data[s.id]); return h?h.id:null;
+}
+function arkTags(v){
+  return [v.status==="sold"?`<span class="xtag"><span class="sw" style="background:var(--s-sold)"></span>Sold</span>`:"",
+    v.keys?`<span class="tag-low" style="background:var(--keybg);color:var(--keyc)">Keys out: ${esc(v.keys.holder||"someone")}</span>`:"",
+    isLow(v)?`<span class="tag-low">${esc(v.range)} mi till E</span>`:"",
+    arkValue(v)?`<span class="xtag">$${Math.round(arkValue(v)).toLocaleString()}</span>`:""].join("");
+}
+function renderArkLight(){
+  const n=Object.values(data).filter(v=>v.arkFrom).length;
+  if(!$("arkView").hidden)renderArk();
+  return n;
+}
+function renderArk(){
+  const p=arkPlan(), box=$("aBody"), btns=$("aHeadBtns"), inN=p.inside.length;
+  const car=(v)=>`<b>${esc(v.stock||"No stock #")}</b> <span class="meta">${esc(v.desc||"")}${v.color?" · "+esc(v.color):""}</span>`;
+  if(!ark.on&&!inN){
+    btns.innerHTML="";
+    box.innerHTML=`<div class="xnote"><h3>Big storm coming?</h3>
+      <p>Start the Ark and it lines up the cars to bring inside, most valuable first, matched to every open shop bay, detail bay, showroom spot and service-drive lane.</p>
+      <ul><li>Sold cars go first. Customers are waiting on those.</li><li>Then the highest-priced cars (MSRP on the map, or the vAuto price).</li><li>Pin a car to force it in. Skip one that has to stay out.</li><li>Every car remembers where it came from. When the storm passes, tap <b>All clear</b> and the list shows where each one goes back.</li></ul>
+      <p class="meta">Right now: <b>${p.free}</b> open spot${p.free===1?"":"s"} inside, <b>${p.go.length+p.wait.length}</b> cars outside.</p>
+      <div class="xtools"><button class="btn primary" type="button" id="aStart"${readOnly?" disabled":""}>Start the Ark</button></div></div>`;
+    $("aStart").onclick=async()=>{ark={...ark,on:true,since:Date.now()};await saveArk();paint();renderArk();toast("Ark started. Load cars in order.")};
+    return;
+  }
+  if(ark.on){
+    btns.innerHTML=`<button class="btn" type="button" id="aExport">Load list</button><button class="btn primary" type="button" id="aClear"${readOnly?" disabled":""}>All clear</button>`;
+    const pct=p.room?Math.round(100*(p.room-p.free)/p.room):0;
+    box.innerHTML=`<div class="xnote"><div class="xnums" style="color:var(--ink);font-size:15px"><span>Started ${esc(fmtTime(ark.since))}</span><span><b>${inN}</b> moved in</span><span><b>${p.free}</b> open inside</span><span><b>${p.wait.length}</b> won't fit</span></div>
+      <div class="abar" aria-label="Building ${pct}% full"><span style="width:${pct}%"></span></div><p class="meta">Building ${pct}% full. Drive each car to its spot, then tap <b>Moved in</b>.</p></div>
+      <h3 class="asec">Next in (${p.go.length})</h3>
+      <div class="acards">${p.go.length?p.go.map((x,i)=>`<div class="acard"><div class="anum">${i+1}</div><div>${car(x.v)}
+        <div class="aroute">${esc(spotName(x.id))} <span>→</span> ${esc(spotName(x.to))}</div><div class="xtags" style="margin-top:4px">${arkTags(x.v)}</div>
+        <div class="abtns"><button class="btn primary" type="button" data-in="${esc(x.id)}" data-to="${esc(x.to)}"${readOnly?" disabled":""}>Moved in</button><button class="btn apin" type="button" data-pin="${esc(vKey(x.v))}" aria-pressed="${(ark.pin||[]).includes(vKey(x.v))}">${(ark.pin||[]).includes(vKey(x.v))?"Pinned":"Pin"}</button><button class="btn" type="button" data-skip="${esc(vKey(x.v))}">Leave out</button></div></div></div>`).join("")
+        :`<div class="empty" style="grid-column:1/-1;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)">${p.free?"Every car is inside.":"The building is full."}</div>`}</div>
+      ${p.wait.length?`<h3 class="asec">Won't fit (${p.wait.length}) · pin one to swap it into the list</h3><div class="acards">${p.wait.map(([id,v])=>`<div class="acard out"><div class="anum">–</div><div>${car(v)}<div class="aroute">${esc(spotName(id))}</div><div class="xtags" style="margin-top:4px">${arkTags(v)}</div><div class="abtns"><button class="btn apin" type="button" data-pin="${esc(vKey(v))}" aria-pressed="false">Pin it in</button></div></div></div>`).join("")}</div>`:""}
+      ${p.skipped.length?`<h3 class="asec">Left out (${p.skipped.length})</h3><div class="acards">${p.skipped.map(([id,v])=>`<div class="acard out"><div class="anum">×</div><div>${car(v)}<div class="aroute">${esc(spotName(id))}</div><div class="abtns"><button class="btn" type="button" data-unskip="${esc(vKey(v))}">Put back on the list</button></div></div></div>`).join("")}</div>`:""}
+      ${inN?`<h3 class="asec">Inside (${inN})</h3><div class="acards">${p.inside.map(([id,v])=>`<div class="acard"><div class="anum">✓</div><div>${car(v)}<div class="aroute">${esc(spotName(id))} <span>· from ${esc(spotName(v.arkFrom))}</span></div></div></div>`).join("")}</div>`:""}`;
+    $("aClear").onclick=async()=>{ark={...ark,on:false,skip:[],pin:[]};await saveArk();paint();renderArk();toast(inN?"All clear. Move cars back out.":"Ark ended")};
+    $("aExport").onclick=()=>saveCsv(`ark-load-list-${new Date().toISOString().slice(0,10)}.csv`,[["Order","Stock #","Vehicle","Color","From","To","Keys","Status"],
+      ...p.go.map((x,i)=>[i+1,x.v.stock,x.v.desc,x.v.color,spotName(x.id),spotName(x.to),x.v.keys?"Out: "+(x.v.keys.holder||""):"In box",(ST[x.v.status]||ST.avail).label])]);
+    return;
+  }
+  // storm over, cars still inside: unload
+  btns.innerHTML=`<button class="btn" type="button" id="aDone"${readOnly?" disabled":""}>Mark all back out</button>`;
+  box.innerHTML=`<div class="xnote"><h3>All clear: ${inN} car${inN===1?"":"s"} to move back out</h3><p class="meta">Each car goes back to the spot it came from. If someone parked there since, it goes to an open spot in the same row, or to Holding.</p></div>
+    <div class="acards">${p.inside.map(([id,v],i)=>{const to=backSpot(id,v);return `<div class="acard"><div class="anum">${i+1}</div><div>${car(v)}
+      <div class="aroute">${esc(spotName(id))} <span>→</span> ${to?esc(spotName(to)):"no open spot"}${to&&to!==v.arkFrom?` <span>(was ${esc(spotName(v.arkFrom))})</span>`:""}</div><div class="xtags" style="margin-top:4px">${arkTags(v)}</div>
+      <div class="abtns">${to?`<button class="btn primary" type="button" data-out="${esc(id)}" data-to="${esc(to)}"${readOnly?" disabled":""}>Moved out</button>`:""}<button class="btn" type="button" data-stay="${esc(id)}"${readOnly?" disabled":""}>Leave it inside</button></div></div></div>`}).join("")}</div>`;
+  $("aDone").onclick=async()=>{if(readOnly)return;let n=0;for(const [id,v] of arkPlan().inside){const to=backSpot(id,v);if(to&&await arkMove(id,to,null))n++}toast(`Moved ${n} car${n===1?"":"s"} back on the map`);renderArk()};
+}
+$("aBody").addEventListener("click",async e=>{
+  const t=e.target.closest("[data-in],[data-pin],[data-skip],[data-unskip],[data-out],[data-stay]"); if(!t||readOnly&&!t.dataset.pin)return;
+  const d=t.dataset;
+  if(d.in){if(await arkMove(d.in,d.to,d.in))toast(`In: ${spotName(d.to)}`);renderArk();return}
+  if(d.out){const v=data[d.out];if(await arkMove(d.out,d.to,null))toast(`Back out: ${spotName(d.to)}`);renderArk();return}
+  if(d.stay){const v=data[d.stay];if(!v)return;const nv={...v,updatedAt:Date.now()};delete nv.arkFrom;data={...data,[d.stay]:nv};paint();await persist(d.stay,nv);renderArk();return}
+  if(d.pin){const s=new Set(ark.pin||[]);s.has(d.pin)?s.delete(d.pin):s.add(d.pin);ark={...ark,pin:[...s]}}
+  if(d.skip){ark={...ark,skip:[...new Set([...(ark.skip||[]),d.skip])],pin:(ark.pin||[]).filter(k=>k!==d.skip)}}
+  if(d.unskip){ark={...ark,skip:(ark.skip||[]).filter(k=>k!==d.unskip)}}
+  await saveArk(); renderArk();
+});
+
 // ---------- Boot ----------
 applySeason(); buildStatusRow(); drawMap(); requestAnimationFrame(sizeTags); if(document.fonts&&document.fonts.ready)document.fonts.ready.then(sizeTags); addEventListener("load",sizeTags); buildTray(); buildZoneList(); data=lsLoad(); keylog=kLoad(); paint(); setSync(false,"Saved on this device");
 (async()=>{
@@ -2277,6 +2659,9 @@ applySeason(); buildStatusRow(); drawMap(); requestAnimationFrame(sizeTags); if(
   if(!db){setSync(false,"Saved on this device only");return}
   setSync(true,"Live · shared with your team");
   keylog=[];
+  db.doc("settings/ark").onSnapshot(snap=>{
+    if(snap.exists){ark={on:false,since:0,skip:[],pin:[],...snap.data()};try{localStorage.setItem(LSA,JSON.stringify(ark))}catch(e){}paint()}
+  },()=>{});
   db.doc("settings/guides").onSnapshot(snap=>{
     if(snap.exists){gset={...GDEF,...snap.data()};fillSetup();if(!$("guidesView").hidden)renderGuides()}
   },()=>{});

@@ -11,6 +11,8 @@ The whole app is a single page: `index.html`.
 - Key tracking with a hand-off log and spreadsheet export
 - Mileage and a 0–500 mi "miles till E" meter, with a low-fuel flag
 - Buyers Guide photos and printing for used units
+- vAuto check: import the daily vAuto inventory export (CSV or Excel) and see what's flagged — cars not found on the lot, cars missing from vAuto, too few photos, no price, aging, sold but still listed, no Buyers Guide photo. The import stays on the device; no API
+- The Ark: storm lockdown. Lines up the most valuable cars to move inside (shop, detail, showroom, service drive), remembers where each came from, and walks you through putting them back after
 - Season tips, seasonal tree colors, a 3D view, and layouts for phone, tablet and desktop
 
 ## Running it
