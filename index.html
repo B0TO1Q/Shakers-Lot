@@ -712,9 +712,10 @@ const ZONES = [
   // Service drive: two lanes straight through from the canopy door to the shop aisle, ~4 cars per lane
   {id:"SD", n:8, x:866, y:566, w:70, h:250, lbl:"below", name:"SERVICE DRIVE", unit:"Drive", area:"Service drive · 2 lanes", shop:true,
    cells:[0,1,2,3].flatMap(r=>[[869,568+r*62,29,56,0],[903,568+r*62,29,56,0]])},
-  // Showroom floor: reception + waiting area in the middle; 4 cars to its left, 3 to its right
+  // Showroom floor: main entrance, reception and the lounge sit in the middle, lined up with the
+  // accessible parking out front; Ford cars 1–4 east of reception, Lincoln 5–7 past the Lincoln portal
   {id:"SR", n:7, x:1048, y:676, w:396, h:72, lbl:"top", name:"SHOWROOM", area:"Showroom · Ford 1–4 · Lincoln 5–7", cells:[
-    [1052,700,28,46,0],[1088,700,28,46,0],[1124,700,28,46,0],[1160,700,28,46,0],
+    [1212,700,28,46,0],[1246,700,28,46,0],[1280,700,28,46,0],[1314,700,28,46,0],
     [1356,680,26,44,0],[1385,680,26,44,0],[1414,680,26,44,0]]},
   // Front of the building
   // Sidewalk display pad: everything centered on the pad's midline (x 1438).
@@ -879,45 +880,46 @@ function drawInterior(svg){
   R(984,674,40,16,{fill:"var(--office)",stroke:"var(--wall)","stroke-width":1,rx:2}); L(1004,685,"WRITE-UP",{class:"room sm"});
   L(984,744,"SERVICE",{}); L(984,755,"LANE",{});
 
-  // ---- showroom (from interior photos) ----
-  // Ford side west: glass offices on the back wall, display cars in a row, sales desks at the front glass.
-  // Middle: main doors come in from the entrance tower onto black tile, a mat leads to the curved
-  // reception desk, and the waiting room (couches in a U around a TV) sits behind it.
-  // Lincoln side east: Lincoln display portal, Lincoln cars, then the side-entrance corridor with
-  // the finance offices on one side and plaques on the other.
-  el("path",{d:"M1040 664 H1507 V734 H1256 V818 H1040 Z",fill:"url(#tiles)"},g);
-  for(let i=0;i<4;i++){const x=1046+i*50;                                    // glass-front offices on the back wall
+  // ---- showroom ----
+  // The main entrance is centered on the accessible parking (x≈1156). Doors open onto black tile that
+  // leads straight back to the curved reception desk, with the lounge (couches in a U around a TV)
+  // behind it against the back wall. Ford side: glass offices on the back wall, sales desks at the
+  // front glass, Ford display cars east of reception. Lincoln side east: Lincoln portal, Lincoln cars,
+  // then the side-entrance corridor with the finance offices.
+  el("path",{d:"M1040 664 H1507 V734 H1350 V818 H1040 Z",fill:"url(#tiles)"},g);
+  [1046,1212,1262].forEach(x=>{                                                // glass-front offices on the back wall
     R(x,668,46,22,{fill:"var(--office)",stroke:"var(--wall)","stroke-width":1});
-    el("line",{x1:x+2,y1:690,x2:x+44,y2:690,stroke:"var(--glass)","stroke-width":2.5},g);}
+    el("line",{x1:x+2,y1:690,x2:x+44,y2:690,stroke:"var(--glass)","stroke-width":2.5},g);});
   // hallway between the shop/detail and the service lane + showroom
   R(936,643,571,19,{fill:"var(--office)"});
   el("line",{x1:936,y1:643,x2:1507,y2:643,stroke:"var(--wall)","stroke-width":2},g);
   HALL_S.forEach(([a,b])=>el("line",{x1:a,y1:662,x2:b,y2:662,stroke:"var(--wall)","stroke-width":2},g));
   [[1090,1104],[1300,1314]].forEach(([a,b])=>el("line",{x1:a,y1:643,x2:b,y2:643,stroke:"var(--office)","stroke-width":3},g)); // doors into the shop
-  L(1180,655.5,"HALLWAY",{class:"room sm"});
-  el("line",{x1:1040,y1:822,x2:1256,y2:822,stroke:"var(--glass)","stroke-width":4},g);   // front window wall
+  L(1380,655.5,"HALLWAY",{class:"room sm"});
+  el("line",{x1:1040,y1:822,x2:1112,y2:822,stroke:"var(--glass)","stroke-width":4},g);   // front window wall, both sides of the entrance
+  el("line",{x1:1200,y1:822,x2:1350,y2:822,stroke:"var(--glass)","stroke-width":4},g);
   el("line",{x1:1350,y1:738,x2:1507,y2:738,stroke:"var(--glass)","stroke-width":4},g);
-  // sales desks: two rows along the front glass
-  [770,798].forEach(y=>[1052,1100,1148,1196].forEach(x=>{R(x,y+6,34,10,{fill:"var(--office)",stroke:"var(--wall)","stroke-width":1,rx:2});
+  // sales desks along the front glass, west and east of the entrance
+  [770,798].forEach(y=>[1050,1214,1262,1310].forEach(x=>{R(x,y+6,34,10,{fill:"var(--office)",stroke:"var(--wall)","stroke-width":1,rx:2});
     el("circle",{cx:x+17,cy:y,r:3.2,fill:"var(--muted)",opacity:.6},g);}));
-  // black tile entry from the main doors to reception, with the walk-off mat
-  R(1258,700,90,34,{fill:"#24282c",opacity:.85});
-  for(let x=1268;x<1348;x+=10)el("line",{x1:x,y1:700,x2:x,y2:734,stroke:"#3a4046","stroke-width":.6},g);
-  for(let y=710;y<734;y+=10)el("line",{x1:1258,y1:y,x2:1348,y2:y,stroke:"#3a4046","stroke-width":.6},g);
-  R(1297,716,16,18,{fill:"#3d434a",rx:1});
-  R(1290,732,30,4,{fill:"var(--glass)"});                                        // doors in from the entrance tower
-  // waiting room behind reception (open on the west side), couches in a U around a TV facing the front
-  R(1258,664,84,34,{fill:"var(--tile)"});
-  [[1258,664,1258,680],[1342,664,1342,698],[1258,698,1342,698]].forEach(([a,b,c,d])=>el("line",{x1:a,y1:b,x2:c,y2:d,stroke:"var(--wall)","stroke-width":2},g));
-  R(1288,698,34,3,{fill:"#4a2a26"});                                             // dark-wood reception backdrop
-  R(1293,666,24,2.5,{fill:"var(--ink)",rx:1});                                   // TV
-  [[1282,671,5,20],[1323,671,5,20],[1282,691,46,5]].forEach(([x,y,w,h])=>R(x,y,w,h,{fill:"#2f3337",rx:1.5}));
-  R(1298,677,14,7,{fill:"none",stroke:"var(--wall)","stroke-width":1,rx:1});
-  R(1261,667,16,5,{fill:"var(--office)",stroke:"var(--wall)","stroke-width":.8});      // coffee bar
+  // lounge against the back wall: couches in a U around a TV, coffee bar
+  R(1110,664,92,34,{fill:"var(--tile)"});
+  [[1110,664,1110,698],[1202,664,1202,698]].forEach(([a,b,c,d])=>el("line",{x1:a,y1:b,x2:c,y2:d,stroke:"var(--wall)","stroke-width":2},g));
+  R(1144,666,24,2.5,{fill:"var(--ink)",rx:1});                                   // TV
+  [[1133,671,5,20],[1174,671,5,20],[1133,691,46,5]].forEach(([x,y,w,h])=>R(x,y,w,h,{fill:"#2f3337",rx:1.5}));
+  R(1149,677,14,7,{fill:"none",stroke:"var(--wall)","stroke-width":1,rx:1});
+  R(1113,667,16,5,{fill:"var(--office)",stroke:"var(--wall)","stroke-width":.8});      // coffee bar
+  L(1156,662,"LOUNGE",{class:"room sm"});
+  R(1139,700,34,3,{fill:"#4a2a26"});                                             // dark-wood reception backdrop
   // reception: receptionist and the curved desk facing the doors
-  el("circle",{cx:1305,cy:704,r:3,fill:"var(--muted)",opacity:.8},g);
-  el("path",{d:"M1287 707 H1323 V711 Q1305 719 1287 711 Z",fill:"#4a2a26",stroke:"var(--wall)","stroke-width":.8},g);
-  // Lincoln display portal (dark wood) between reception and the Lincoln cars
+  el("circle",{cx:1156,cy:707,r:3,fill:"var(--muted)",opacity:.8},g);
+  el("path",{d:"M1138 710 H1174 V714 Q1156 722 1138 714 Z",fill:"#4a2a26",stroke:"var(--wall)","stroke-width":.8},g);
+  // black tile entry from the main doors to reception, with the walk-off mat
+  R(1112,724,88,98,{fill:"#24282c",opacity:.85});
+  for(let x=1122;x<1200;x+=10)el("line",{x1:x,y1:724,x2:x,y2:822,stroke:"#3a4046","stroke-width":.6},g);
+  for(let y=734;y<822;y+=10)el("line",{x1:1112,y1:y,x2:1200,y2:y,stroke:"#3a4046","stroke-width":.6},g);
+  R(1146,790,20,26,{fill:"#3d434a",rx:1});
+  // Lincoln display portal (dark wood) between the Ford cars and the Lincoln cars
   R(1346,668,5,30,{fill:"#4a2a26"}); R(1346,706,5,24,{fill:"#4a2a26"});
   // side entrance on the east wall: corridor with a mat, plaques on the north wall, finance offices on the south side
   R(1444,666,63,32,{fill:"var(--tile)"});
@@ -977,16 +979,17 @@ function drawMap(){
   el("path",{d:"M858 432 H1515 V742 H1350 V826 H858 Z",fill:"var(--bldg)"},svg);
   drawInterior(svg);
   // ---- Building front, from street photos ----
-  // Ford entrance tower: brushed-silver block with the blue oval over the main showroom doors (service is the west end)
-  el("rect",{x:1262,y:746,width:86,height:80,fill:"var(--tower)",stroke:"var(--wall)","stroke-width":2},svg);
+  // Ford entrance tower: brushed-silver block with the blue oval over the main showroom doors, centered on the
+  // accessible parking (service is the west end)
   el("path",{d:"M838 846 Q 1080 800 1330 836",fill:"none",stroke:"var(--surface)","stroke-width":9,"stroke-linecap":"round"},svg);
+  el("rect",{x:1112,y:808,width:88,height:30,fill:"var(--tower)",stroke:"var(--wall)","stroke-width":2},svg);
   const FR=el("g",{class:"lm"},svg);
-  ovalBadge(FR,1305,776,17,10);
-  el("rect",{x:1290,y:820,width:30,height:6,fill:"var(--glass)"},FR);                       // glass entrance doors
-  el("line",{x1:1305,y1:820,x2:1305,y2:826,stroke:"var(--wall)","stroke-width":1},FR);
-  el("rect",{x:1288,y:828,width:34,height:5,rx:1,fill:"var(--paint)"},FR);                  // yellow tactile strip
-  [[1272,832],[1338,832]].forEach(([cx,cy])=>el("circle",{cx,cy,r:3,fill:"var(--paint)",stroke:"var(--ink)","stroke-width":.6},FR)); // bollards
-  {const t=el("text",{x:1305,y:806,"text-anchor":"middle",class:"lm-inv lm-face"},FR);t.textContent="MAIN ENTRANCE";}
+  ovalBadge(FR,1134,823,12,7);
+  {const t=el("text",{x:1172,y:825,"text-anchor":"middle",class:"lm-inv lm-face",style:"font-size:4.6px"},FR);t.textContent="MAIN ENTRANCE";}
+  el("rect",{x:1141,y:838,width:30,height:5,fill:"var(--glass)"},FR);                       // glass entrance doors
+  el("line",{x1:1156,y1:838,x2:1156,y2:843,stroke:"var(--wall)","stroke-width":1},FR);
+  el("rect",{x:1139,y:845,width:34,height:4,rx:1,fill:"var(--paint)"},FR);                  // yellow tactile strip
+  [[1120,846],[1192,846]].forEach(([cx,cy])=>el("circle",{cx,cy,r:3,fill:"var(--paint)",stroke:"var(--ink)","stroke-width":.6},FR)); // bollards
   // "SHAKER" portal over the two SERVICE overhead doors, west end
   el("rect",{x:858,y:818,width:78,height:8,fill:"var(--tower)"},FR);
   [[868,826],[902,826]].forEach(([x,y])=>{el("rect",{x,y,width:28,height:4,fill:"var(--surface)",stroke:"var(--wall)","stroke-width":.8},FR);
@@ -1643,20 +1646,20 @@ function build3D(){
   flat(R(936,643,571,19),M.office,0.5);
   wall(936,643,1515,643,18,M.bldg,4); HALL_S.forEach(([a,b])=>wall(a,662,b,662,18,M.bldg,4)); wall(936,643,936,826,18,M.bldg,4); wall(1036,662,1036,826,18,M.bldg,5);
   block(R(870,448,92,72),14,M.office);
-  for(let i=0;i<4;i++)block(R(1046+i*50,668,46,22),12,M.office);
+  [1046,1212,1262].forEach(x=>block(R(x,668,46,22),12,M.office));
   {const wood=mat("#4a2a26"), dark=mat("#2f3337");
-   block(R(1258,700,90,34),0.3,M.drain,0.45);                                  // black tile entry
-   wall(1258,664,1258,680,14,M.bldg,2); wall(1342,664,1342,698,14,M.bldg,2); wall(1258,698,1342,698,14,M.bldg,2);
-   block(R(1288,697,34,4),20,wood);                                            // reception backdrop
-   block(R(1293,665,24,2.5),10,M.drain,4);                                      // TV
-   [[1282,671,5,20],[1323,671,5,20],[1282,691,46,5]].forEach(([x,y,w,h])=>block(R(x,y,w,h),4,dark));
-   block([[1287,707],[1323,707],[1323,711],[1305,716],[1287,711]],6,wood);       // reception desk
+   block(R(1112,724,88,98),0.3,M.drain,0.45);                                  // black tile entry
+   wall(1110,664,1110,698,14,M.bldg,2); wall(1202,664,1202,698,14,M.bldg,2);   // lounge
+   block(R(1139,699,34,4),20,wood);                                            // reception backdrop
+   block(R(1144,665,24,2.5),10,M.drain,4);                                      // TV
+   [[1133,671,5,20],[1174,671,5,20],[1133,691,46,5]].forEach(([x,y,w,h])=>block(R(x,y,w,h),4,dark));
+   block([[1138,710],[1174,710],[1174,714],[1156,719],[1138,714]],6,wood);       // reception desk
    block(R(1346,668,5,30),22,wood); block(R(1346,706,5,24),22,wood);            // Lincoln portal
    [1446,1476].forEach(x=>block(R(x,702,29,26),12,M.office));                   // finance offices
-   [770,798].forEach(y=>[1052,1100,1148,1196].forEach(x=>block(R(x,y+6,34,10),5,M.office)));}
+   [770,798].forEach(y=>[1050,1214,1262,1310].forEach(x=>block(R(x,y+6,34,10),5,M.office)));}
   for(let k=0;k<24;k++){const x=bayX(k),y=(k<12?450:564)+28;block(R(x-3.5,y,3,14),18,M.lift);block(R(x+35.5,y,3,14),18,M.lift)}
   const roofParts=[block(OUT,2,M.bldg,WH)];
-  block(R(1262,746,86,80),WH+10,M.tower);                                       // Ford entrance tower, taller than the facade
+  block(R(1112,808,88,30),WH+10,M.tower);                                       // Ford entrance tower, taller than the facade
   // Ford pylon sign and Lincoln monument sign at the street
   {const [px,pz]=P(1333.5,1024); const pole=new T.Mesh(new T.CylinderGeometry(2.4,2.8,64,10),M.tower); pole.position.set(px,32,pz); pole.castShadow=true; scene.add(pole);
    const disc=new T.Mesh(new T.CylinderGeometry(1,1,3,40),new T.MeshLambertMaterial({color:0x1f3c88})); disc.scale.set(16,1,10); disc.rotation.x=Math.PI/2; disc.position.set(px,74,pz); disc.castShadow=true; scene.add(disc);
