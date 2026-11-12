@@ -7,7 +7,7 @@
   --bg:#f4f5f6; --surface:#ffffff; --asphalt:#dde1e4; --ink:#16191c; --muted:#5f6b73; --line:#d5dade;
   --spotline:#b9c0c5; --paint:#f2c230; --accent:#1f5fa8; --bldg:#5b6369; --roof-ink:#f1f3f4; --wall:#9aa2a7; --neighbor:#c4cacf; --pad:#e3d6bb;
   --shop:#cfd3d6; --tower:#c3c8cc; --gravel:#cfc6b6; --tile:#eeebe4; --lift:#2b5ea7; --glass:#8fc3e6; --drain:#3a4045; --office:#dfe3e6;
-  --leaf1:#6f9a5e; --leaf2:#4f7d45; --leaf3:#8db376; --lawn:#c9dcbc;
+  --leaf1:#6f9a5e; --leaf2:#4f7d45; --leaf3:#8db376; --lawn:#c9dcbc; --wood:#e2e6df; --grass:#e9ece5;
   --ev:#14967f; --keyc:#c2410c; --keybg:#fff1e6; --lowc:#b91c1c; --lowbg:#fde8e8; --dumpster:#3d6b4f; --tipc:#c26a1f; --staff:rgba(120,130,140,.10);
   --s-avail:#2f8f5b; --s-sold:#7a4cc2; --s-svc:#d9822b; --s-hold:#c23b3b; --s-demo:#2c7fb8; --s-empty:#f8f9fa;
   --f-ui:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -17,14 +17,14 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#111416; --surface:#1b1f22; --asphalt:#262c30; --ink:#eef1f3; --muted:#9aa6ad; --line:#323a3f;
   --spotline:#4a545a; --paint:#e8b923; --accent:#6ea8ef; --bldg:#0c0f11; --roof-ink:#c9d1d5; --wall:#5d6970; --neighbor:#323a3f; --pad:#4d4433; --tower:#4b5359; --gravel:#4a4439; --shop:#2b3135; --tile:#36332e; --lift:#5a8fdc; --glass:#4f86a8; --drain:#0c0f11; --office:#22282c;
-  --ev:#2bbf9f; --keyc:#fb923c; --keybg:#3a2416; --lowc:#f87171; --lowbg:#3b1a1a; --dumpster:#2f5a40; --tipc:#e8964a; --staff:rgba(160,175,185,.06);
+  --wood:#1d2325; --grass:#21282b; --ev:#2bbf9f; --keyc:#fb923c; --keybg:#3a2416; --lowc:#f87171; --lowbg:#3b1a1a; --dumpster:#2f5a40; --tipc:#e8964a; --staff:rgba(160,175,185,.06);
   --s-avail:#3fae72; --s-sold:#9a72dc; --s-svc:#e39444; --s-hold:#e05a5a; --s-demo:#4a9bd2; --s-empty:#353d42;
   --shadow:0 1px 2px rgba(0,0,0,.3);
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#111416; --surface:#1b1f22; --asphalt:#262c30; --ink:#eef1f3; --muted:#9aa6ad; --line:#323a3f;
   --spotline:#4a545a; --paint:#e8b923; --accent:#6ea8ef; --bldg:#0c0f11; --roof-ink:#c9d1d5; --wall:#5d6970; --neighbor:#323a3f; --pad:#4d4433; --tower:#4b5359; --gravel:#4a4439; --shop:#2b3135; --tile:#36332e; --lift:#5a8fdc; --glass:#4f86a8; --drain:#0c0f11; --office:#22282c;
-  --ev:#2bbf9f; --keyc:#fb923c; --keybg:#3a2416; --lowc:#f87171; --lowbg:#3b1a1a; --dumpster:#2f5a40; --tipc:#e8964a; --staff:rgba(160,175,185,.06);
+  --wood:#1d2325; --grass:#21282b; --ev:#2bbf9f; --keyc:#fb923c; --keybg:#3a2416; --lowc:#f87171; --lowbg:#3b1a1a; --dumpster:#2f5a40; --tipc:#e8964a; --staff:rgba(160,175,185,.06);
   --s-avail:#3fae72; --s-sold:#9a72dc; --s-svc:#e39444; --s-hold:#e05a5a; --s-demo:#4a9bd2; --s-empty:#353d42;
   --shadow:0 1px 2px rgba(0,0,0,.3);
   color-scheme:dark}
@@ -111,7 +111,6 @@ svg text{font-family:var(--f-ui)}
 .spot:focus{outline:none}
 .spot.dim{opacity:.2}
 .spot.hit rect:not(.stripe){stroke:var(--ink);stroke-width:3}
-.mapwrap.tipping .spot.hit rect:not(.stripe){stroke:var(--tipc)}
 .spot.lifted{opacity:.35}
 .spot.target rect:not(.stripe){stroke:var(--accent);stroke-width:4}
 .stock{font-family:var(--f-mono);font-size:7px;fill:#fff;font-weight:600;pointer-events:none}
@@ -176,23 +175,6 @@ tr.row:hover td{background:var(--bg)}
 .empty{padding:28px 16px;color:var(--muted);text-align:center}
 
 /* ---- season tips ---- */
-.tips{position:absolute;z-index:6;top:8px;right:8px;width:min(460px,calc(100% - 16px));max-height:calc(100% - 16px);overflow:auto;overscroll-behavior:contain;background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--tipc);border-radius:var(--r);padding:14px 16px;display:grid;gap:10px;box-shadow:0 12px 36px rgba(16,24,32,.22)}
-.tips .thead{display:flex;align-items:center;gap:8px;position:sticky;top:-14px;margin:-14px -16px 0;padding:14px 16px 6px;background:var(--surface);z-index:1}
-.tips h3{margin:0;font-size:22px;flex:1;min-width:0}
-.tips .tbtn{flex:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
-.tips.min{max-height:none}
-.tips.min>:not(.thead){display:none}
-.tips.min .thead{position:static;margin:-14px -16px -14px;padding:10px 16px}
-.tips.min h3{font-size:18px}
-.tips .lede{margin:0;color:var(--muted);font-size:16px;max-width:70ch}
-.tips ul{margin:0;padding-left:20px;display:grid;gap:6px;font-size:16px;max-width:75ch}
-.tips .nums{display:flex;flex-wrap:wrap;gap:8px}
-.tips .num-chip{background:var(--bg);border-radius:999px;padding:8px 14px;font-size:15px}
-.tips .num-chip b{font-weight:700}
-.tips .moves{display:flex;flex-wrap:wrap;gap:8px}
-.tips .moves button{font-size:15px;min-height:52px;padding:6px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;text-align:left}
-.tips .moves button small{display:block;color:var(--muted);font-size:13px}
-.tips h4{margin:4px 0 0;font-size:14px;color:var(--muted);font-weight:600}
 
 /* ---- mileage / fuel ---- */
 .unitwrap{position:relative;display:block}
@@ -348,8 +330,7 @@ html[data-device="phone"] body{font-size:16px}
 html[data-device="phone"]{--gut:12px;--dockh:74px}
 html[data-device="phone"] .app{padding-top:10px;gap:10px}
 html[data-device="phone"] #mapView .zhint{display:none}
-html[data-device="phone"] .tips{left:0;right:0;top:0;width:auto;max-height:100%}
-html[data-device="phone"] .top{display:grid;grid-template-columns:1fr auto;gap:10px}
+html[data-device="phone"] html[data-device="phone"] .top{display:grid;grid-template-columns:1fr auto;gap:10px}
 html[data-device="phone"] .brand b{font-size:20px}
 html[data-device="phone"] .search{grid-column:1/-1;grid-row:2;min-width:0;min-height:48px}
 html[data-device="phone"] .search input{font-size:17px;min-height:46px}
@@ -454,6 +435,16 @@ html[data-device="desktop"] .kbd{display:inline-block}
   html:not([data-device="desktop"]) .toast{bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 }
 @media (prefers-reduced-motion:no-preference){.spot rect{transition:fill .2s}}
+.mapwrap{position:relative}
+.maptools{position:absolute;top:10px;right:10px;z-index:5;display:flex;gap:6px}
+.mapwrap.full .maptools{display:none}
+.mtool{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 14px var(--f-ui);cursor:pointer;box-shadow:var(--shadow)}
+.mtool svg{width:18px;height:18px}
+.mtool[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+html[data-device="phone"] .maptools{top:6px;right:6px;gap:4px}
+html[data-device="phone"] .mtool{min-height:34px;width:34px;padding:0;justify-content:center;border-radius:9px}
+html[data-device="phone"] .mtool .mt-l{display:none}
+html[data-device="phone"] .mtool svg{width:17px;height:17px}
 .xhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .xhead label.btn,.xtools label.btn{display:inline-flex;align-items:center;justify-content:center}
 .xnote{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:10px}
@@ -503,7 +494,6 @@ html[data-device="phone"] .xcards,html[data-device="phone"] .acards{grid-templat
 
   <div class="stats" id="stats"></div>
   <main class="stage" id="stage">
-  <section class="tips" id="tips" hidden aria-live="polite"></section>
 
   <div id="mapView" class="view">
     <div class="mapwrap" id="mapwrap">
@@ -513,6 +503,7 @@ html[data-device="phone"] .xcards,html[data-device="phone"] .acards{grid-templat
         <div class="ztitle" id="zTitle"></div>
         <button class="zbtn" type="button" id="zNext" aria-label="Next zone">›</button>
       </div>
+      <div class="maptools"><button type="button" class="mtool" id="labelsBtn" aria-pressed="true" aria-label="Labels" title="Labels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/></svg><span class="mt-l">Labels</span></button><button type="button" class="mtool" id="open3d" aria-pressed="false" aria-label="3D view" title="3D view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg><span class="mt-l">3D</span></button><button type="button" class="mtool" id="arkBtn" aria-label="Storm lockdown (the Ark)" title="Storm lockdown (the Ark)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15a4 4 0 1 1 .9-7.9A5.5 5.5 0 0 1 18.5 9 3.5 3.5 0 0 1 18 16H7"/><path d="m11 18-1 3M15 18l-1 3"/></svg><span class="mt-l">Storm</span></button></div>
       <div class="mapbox"><svg id="map" viewBox="0 0 1946 1160" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Lot plan"></svg></div>
       <div class="tray">
         <div class="tlabel">Holding<small>Park cars here while you shuffle</small></div>
@@ -596,9 +587,6 @@ html[data-device="phone"] .xcards,html[data-device="phone"] .acards{grid-templat
   <button type="button" id="vKeys" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="m10.8 12.2 8.7-8.7M17 6l2 2M15 8l2 2"/></svg>Keys<span class="dbadge" id="keysBadge" hidden></span></button>
   <button type="button" id="vGuides" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7Z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></svg>Guides<span class="dbadge" id="guidesBadge" hidden></span></button>
   <button type="button" id="vCheck" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"/></svg>Check<span class="dbadge" id="checkBadge" hidden></span></button>
-  <button type="button" id="tipsBtn" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3Z"/></svg>Tips</button>
-  <button type="button" id="open3d" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg>3D</button>
-  <button type="button" id="labelsBtn" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/></svg>Labels</button>
 </nav>
 
 <div class="scrim" id="scrim" hidden>
@@ -775,7 +763,7 @@ const zoneOf = id=>id.split("-")[0];
 // ---------- State ----------
 let data = {};
 let db = null, readOnly = false;
-let tipMode = false, labelsOn = true, keyFilter = false, lowFilter = false;
+let labelsOn = true, keyFilter = false, lowFilter = false;
 let filter = "", statusFilter = null, editing = null, pickStatus = "avail", zoomed = null;
 const $ = id=>document.getElementById(id);
 $("spotTotal").textContent = total;
@@ -959,19 +947,18 @@ function drawMap(){
   el("rect",{width:6,height:6,fill:"var(--s-empty)"},pat); el("line",{x1:0,y1:0,x2:0,y2:6,stroke:"var(--line)","stroke-width":2.5},pat);
   const ah=el("pattern",{id:"adaHatch",width:6,height:6,patternUnits:"userSpaceOnUse",patternTransform:"rotate(45)"},defs);
   el("rect",{width:6,height:6,fill:"none"},ah); el("line",{x1:0,y1:0,x2:0,y2:6,stroke:"var(--surface)","stroke-width":2,opacity:.9},ah);
-  // foliage: base color plus leaf clumps; colors come from the current season
+  // woods: one flat, quiet tone so the cars stand out (the 3D view keeps the seasonal colors)
   const fol=el("pattern",{id:"foliage",width:64,height:64,patternUnits:"userSpaceOnUse"},defs);
-  el("rect",{width:64,height:64,fill:"var(--leaf1)"},fol);
-  [[10,12,11,2],[38,8,9,3],[56,30,12,2],[22,36,13,3],[48,54,10,2],[6,54,9,3],[30,58,7,2],[60,6,7,3]].forEach(([cx,cy,r,c])=>el("circle",{cx,cy,r,fill:`var(--leaf${c})`,opacity:.55},fol));
+  el("rect",{width:64,height:64,fill:"var(--wood)"},fol);
   el("rect",{x:0,y:0,width:1946,height:1160,fill:"var(--asphalt)"},svg);
   // woods north + east, tree strips, grass
   el("path",{d:"M600 0 H1946 V1100 H1922 V600 L1905 476 H1532 V432 H1140 L1110 360 L1000 330 L860 320 L760 250 L690 110 L600 70 Z",fill:"url(#foliage)"},svg);
-  el("path",{d:"M0 380 H140 V900 H0 Z",fill:"url(#foliage)",opacity:.8},svg);
+  el("path",{d:"M0 380 H140 V900 H0 Z",fill:"url(#foliage)"},svg);
   el("path",{d:"M560 380 L690 380 L720 470 L705 930 L640 930 L590 700 Z",fill:"url(#foliage)"},svg);
-  el("path",{d:"M0 375 H560 V412 H0 Z",fill:"url(#foliage)",opacity:.8},svg);
+  el("path",{d:"M0 375 H560 V412 H0 Z",fill:"url(#foliage)"},svg);
   el("line",{x1:1530,y1:476,x2:1906,y2:476,stroke:"var(--wall)","stroke-width":6},svg);
-  el("path",{d:"M950 1018 H1765 V1100 H950 Z",fill:"var(--lawn)"},svg);
-  el("path",{d:"M380 990 H700 V1100 H380 Z M0 990 H275 V1100 H0 Z",fill:"var(--lawn)"},svg);
+  el("path",{d:"M950 1018 H1765 V1100 H950 Z",fill:"var(--grass)"},svg);
+  el("path",{d:"M380 990 H700 V1100 H380 Z M0 990 H275 V1100 H0 Z",fill:"var(--grass)"},svg);
   // Route 63
   el("rect",{x:0,y:1100,width:1946,height:60,fill:"var(--bldg)",opacity:.35},svg);
   el("line",{x1:0,y1:1130,x2:1946,y2:1130,stroke:"var(--paint)","stroke-width":3,"stroke-dasharray":"26 20"},svg);
@@ -1034,7 +1021,7 @@ function drawMap(){
   // Ford pylon: tall pole with the oval sign, on a gravel island with display trucks around it
   el("rect",{x:1281,y:990,width:80,height:54,rx:9,fill:"var(--gravel)",stroke:"var(--wall)","stroke-width":2},svg);
   // Lincoln monument: black sign cabinet with the star and LINCOLN, white base, on a landscaped grass island
-  el("rect",{x:1793,y:1004,width:130,height:68,rx:14,fill:"var(--lawn)",stroke:"var(--wall)","stroke-width":2},svg);
+  el("rect",{x:1793,y:1004,width:130,height:68,rx:14,fill:"var(--grass)",stroke:"var(--wall)","stroke-width":2},svg);
   [[1838,1060,5],[1878,1060,6],[1852,1066,4],[1866,1058,4]].forEach(([cx,cy,r])=>el("circle",{cx,cy,r,fill:"url(#foliage)",opacity:.9},svg));
 
   // ---- Side pad (west corner) — details from site photos ----
@@ -1162,7 +1149,6 @@ function buildZoneList(){
 function matches(v){
   if(!v)return false;
   if(statusFilter && v.status!==statusFilter)return false;
-  if(tipMode && !tipPlan().match(v))return false;
   if(keyFilter && !v.keys)return false;
   if(lowFilter && !isLow(v))return false;
   if(guideFilter && !(isUsed(v)&&!v.guidePhoto))return false;
@@ -1173,7 +1159,7 @@ function matches(v){
 const label5=(v,n)=>(v.stock||v.vin||"•").slice(-n);
 function paint(){
   renderCheckLight();
-  const active=!!(filter||statusFilter||tipMode||keyFilter||lowFilter||guideFilter||checkFilter);
+  const active=!!(filter||statusFilter||keyFilter||lowFilter||guideFilter||checkFilter);
   SPOTS.forEach(s=>{
     const v=data[s.id], col=v?`var(${(ST[v.status]||ST.avail).c})`:"var(--s-empty)";
     const hit=active&&matches(v);
@@ -1204,7 +1190,6 @@ function paint(){
     z.btn&&z.btn.classList.toggle("hasHit",hits>0);
   });
   if(zoomed)setTitle();
-  if(tipMode)renderTips();
   if(three.ready&&three.open)three.cars();
   renderStats(); renderList(); renderKeysLight(); renderGuidesLight(); renderArkLight();
 }
@@ -1223,19 +1208,16 @@ function renderStats(){
   if(low||lowFilter){const k=document.createElement("button");k.className="chip";k.type="button";k.setAttribute("aria-pressed",String(lowFilter));
    k.innerHTML=`<span class="sw" style="background:var(--lowc)"></span>Low fuel <b>${low}</b>`;k.onclick=()=>{lowFilter=!lowFilter;paint()};box.appendChild(k);}
   const kout=Object.values(data).filter(v=>v.keys).length;
-  {const k=document.createElement("button");k.className="chip";k.type="button";k.setAttribute("aria-pressed",String(keyFilter));
+  if(kout||keyFilter){const k=document.createElement("button");k.className="chip";k.type="button";k.setAttribute("aria-pressed",String(keyFilter));
    k.innerHTML=`<span class="sw" style="background:var(--keyc)"></span>Keys out <b>${kout}</b>`;k.onclick=()=>{keyFilter=!keyFilter;paint()};box.appendChild(k);}
   const gmiss=Object.entries(data).filter(([id,v])=>missingGuide(id,v)).length;
-  if(gmiss||guideFilter){const k=document.createElement("button");k.className="chip";k.type="button";k.setAttribute("aria-pressed",String(guideFilter));
+  if(guideFilter){const k=document.createElement("button");k.className="chip";k.type="button";k.setAttribute("aria-pressed",String(guideFilter));
    k.innerHTML=`<span class="sw" style="background:var(--tipc)"></span>No guide photo <b>${gmiss}</b>`;k.onclick=()=>{guideFilter=!guideFilter;paint()};box.appendChild(k);}
-  if(staff){const h=document.createElement("span");h.className="chip";h.style.cursor="default";h.innerHTML=`<span class="sw" style="background:var(--staff);border:1.5px dashed var(--muted)"></span>Employee & service lot <b>${staff}</b>`;box.appendChild(h)}
-  if(inShop){const h=document.createElement("span");h.className="chip";h.style.cursor="default";h.innerHTML=`<span class="sw" style="background:var(--lift)"></span>In the shop <b>${inShop}</b>`;box.appendChild(h)}
-  if(held){const h=document.createElement("span");h.className="chip";h.style.cursor="default";h.innerHTML=`<span class="sw" style="border:1.5px dashed var(--muted)"></span>In holding <b>${held}</b>`;box.appendChild(h)}
   if(checkFilter){const k=document.createElement("button");k.className="chip";k.type="button";k.setAttribute("aria-pressed","true");
    k.innerHTML=`<span class="sw" style="background:var(--s-hold)"></span>vAuto flags on map <b>${checkKeys.size}</b>`;k.title="Tap to stop showing vAuto flags";k.onclick=()=>{checkFilter=false;paint()};box.prepend(k);}
   {const inN=Object.values(data).filter(v=>v.arkFrom).length, k=document.createElement("button");k.className="chip arkchip";k.type="button";k.setAttribute("aria-pressed",String(!!ark.on||inN>0));
-   k.innerHTML=`<span class="sw" style="background:var(--s-demo)"></span>${ark.on?`Ark on · <b>${inN}</b> inside`:inN?`All clear · <b>${inN}</b> to move out`:"Storm coming? The Ark"}`;k.onclick=()=>{if(zoomed)unzoom();showView("ark")};
-   if(ark.on||inN)box.prepend(k);else box.appendChild(k);}
+   k.innerHTML=`<span class="sw" style="background:var(--s-demo)"></span>${ark.on?`Ark on · <b>${inN}</b> inside`:`All clear · <b>${inN}</b> to move out`}`;k.onclick=()=>{if(zoomed)unzoom();showView("ark")};
+   if(ark.on||inN)box.prepend(k);}
   STATUS.forEach(s=>{
     const b=document.createElement("button");
     b.className="chip";b.type="button";b.setAttribute("aria-pressed",String(statusFilter===s.k));
@@ -1600,7 +1582,7 @@ async function open3D(){
   three.resize(); three.cars(); three.start();
 }
 function close3D(){three.open=false;$("three").hidden=true;if(!zoomed)document.body.classList.remove("zoomed");three.stop&&three.stop();$("t3info").hidden=true}
-$("open3d").onclick=open3D; $("close3d").onclick=close3D;
+$("open3d").onclick=open3D; $("arkBtn").onclick=()=>showView("ark"); $("close3d").onclick=close3D;
 $("seasonSel").value=seasonPick;
 $("seasonSel").onchange=e=>{seasonPick=e.target.value;try{localStorage.setItem("lot-season",seasonPick)}catch(_){}applySeason()};
 let roofOn=false; try{roofOn=localStorage.getItem("lot-roof")==="1"}catch(e){}
@@ -1795,80 +1777,8 @@ function build3D(){
 }
 
 
-// ---------- Season tips ----------
-// Rules-based suggestions for the season ahead. Matching is done on what's typed in the
-// vehicle field (and notes), so "2025 Explorer ST AWD" or "F-150 4x4" are picked up.
-const FRONT=new Set(["SR","Z1","Z9","Z12","Z11","Z10","Z14","Z13"]);
-const RX={
-  traction:/\b(awd|4wd|4x4|4×4|all[- ]?wheel|four[- ]?wheel|bronco|expedition|explorer|f-?150|f-?250|f-?350|super ?duty|ranger|navigator|aviator|nautilus|corsair|edge|escape awd|mach-?e awd)\b/i,
-  fun:/\b(mustang|convertible|bronco|maverick|ranger|mach-?e|gt\b|raptor)\b/i,
-  tow:/\b(f-?150|f-?250|f-?350|super ?duty|expedition|navigator|ranger|tow|raptor|tremor)\b/i,
-  big:/\b(expedition|navigator|explorer|aviator|max)\b/i,
-  rwdSport:/\b(mustang|convertible)\b/i,
-  budget:/\b(used|cpo|pre-?owned)\b/i
-};
-const text=v=>[v.desc,v.note].join(" ");
+// model year from the vehicle field, e.g. "2025 F-150 XLT"
 const yearOf=v=>{const m=String(v.desc||"").match(/\b(19|20)\d{2}\b/);return m?+m[0]:null};
-function tipPlan(d=new Date()){
-  const m=d.getMonth(), y=d.getFullYear();
-  if(m>=8&&m<=10) return {key:"fall",title:"Winter is on the way",
-    lede:"Snow usually starts showing up in central Connecticut by late November or December, and shoppers start thinking about traction now.",
-    label:"AWD / 4x4 / trucks & SUVs", match:v=>RX.traction.test(text(v)), avoid:v=>RX.rwdSport.test(text(v)), avoidLabel:"Mustangs & convertibles on the front line",
-    tips:["Put AWD and 4x4 units, trucks and SUVs on the front line: Zone 1, Ford Sign, Lincoln Sign, Sidewalk and Front Pad.",
-          "Move Mustangs and convertibles off the front row until spring.",
-          "Model-year changeover: prior-year units are the ones to move before the new ones stack up.",
-          "Call out heated seats, remote start and tire packages in the notes."],
-    extra:v=>{const yr=yearOf(v);return yr&&yr<y}, extraLabel:`Prior model year (before ${y})`};
-  if(m===11||m<=1) return {key:"winter",title:m===1?"Snow season + tax refunds":"Snow season",
-    lede:m===1?"Tax refunds start landing mid-February. Traction still sells, and budget-friendly units get extra looks.":"Traction sells on snow days. Keep the cars people are searching for easy to see and easy to clear off.",
-    label:"AWD / 4x4 / trucks & SUVs", match:v=>RX.traction.test(text(v)), avoid:v=>RX.rwdSport.test(text(v)), avoidLabel:"Mustangs & convertibles on the front line",
-    tips:["Keep AWD and 4x4 units on the front line and cleared of snow first.",
-          m===1?"Put lower-priced used units where refund shoppers will see them.":"Plan snow removal so the front line is cleared before the lot opens.",
-          "Keep RWD sports cars and convertibles in the back rows.",
-          "Note remote start, heated wheel and winter tires on the sticker."]};
-  if(m>=2&&m<=4) return {key:"spring",title:"Spring shoppers",
-    lede:"Warm weekends bring out fun-car and road-trip buyers. Salt season is over, so front-line cars should look clean.",
-    label:"Mustang / Bronco / convertibles / Maverick", match:v=>RX.fun.test(text(v)), avoid:null,
-    tips:["Front-line Mustangs, Broncos and convertibles on nice-weather weekends.",
-          "Rinse road salt off the front line and display pads.",
-          "Maverick and hybrids for buyers planning summer road trips.",
-          "Rotate 4x4s that sat out front all winter to the back rows."]};
-  return {key:"summer",title:"Towing & road-trip season",
-    lede:"Boat, camper and vacation season. Trucks with tow packages and 3-row SUVs get the most attention, and next model year is close.",
-    label:"Trucks / towing / 3-row SUVs", match:v=>RX.tow.test(text(v))||RX.big.test(text(v)), avoid:null,
-    tips:["Front-line F-150s, Super Duty and Rangers with tow packages.",
-          "Put Expedition, Explorer, Navigator and Aviator where families walk in.",
-          "New model year arrives late summer, so start moving prior-year units.",
-          "Mention trailer brake controllers and hitch packages in the notes."],
-    extra:v=>{const yr=yearOf(v);return yr&&yr<y}, extraLabel:`Prior model year (before ${y})`};
-}
-function renderTips(){
-  const plan=tipPlan(), box=$("tips");
-  const cars=Object.entries(data).filter(([id])=>spotById[id]&&!isStaff(id)&&!isShop(id));
-  const hits=cars.filter(([,v])=>plan.match(v)), zoneOfId=id=>spotById[id].zone.id;
-  const front=hits.filter(([id])=>FRONT.has(zoneOfId(id))), back=hits.filter(([id])=>!FRONT.has(zoneOfId(id)));
-  const avoid=plan.avoid?cars.filter(([id,v])=>FRONT.has(zoneOfId(id))&&plan.avoid(v)):[];
-  const extra=plan.extra?cars.filter(([,v])=>plan.extra(v)):[];
-  const btn=([id,v])=>`<button type="button" data-go="${esc(id)}">${esc(v.stock||v.desc||"Vehicle")}<small>${esc(spotName(id))}${v.desc&&v.stock?" · "+esc(v.desc):""}</small></button>`;
-  box.innerHTML=`<div class="thead"><h3>${esc(plan.title)}</h3><button type="button" class="tbtn" data-tmin aria-label="${box.classList.contains("min")?"Show tips":"Shrink tips"}">${box.classList.contains("min")?"▾":"–"}</button><button type="button" class="tbtn" data-tclose aria-label="Close tips">✕</button></div><p class="lede">${esc(plan.lede)}</p>
-    <ul>${plan.tips.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
-    <div class="nums">
-      <span class="num-chip">${esc(plan.label)} on the lot <b>${hits.length}</b></span>
-      <span class="num-chip">On the front line <b>${front.length}</b></span>
-      ${plan.extra?`<span class="num-chip">${esc(plan.extraLabel)} <b>${extra.length}</b></span>`:""}
-    </div>
-    ${back.length?`<h4>Move up front (${back.length})</h4><div class="moves">${back.slice(0,12).map(btn).join("")}</div>`:""}
-    ${avoid.length?`<h4>${esc(plan.avoidLabel)} (${avoid.length})</h4><div class="moves">${avoid.slice(0,12).map(btn).join("")}</div>`:""}
-    ${!cars.length?`<p class="lede">Matches light up on the map once vehicles are logged with their model in the Year / Make / Model field.</p>`:!hits.length?`<p class="lede">No ${esc(plan.label)} matched yet. Matching reads the Year / Make / Model field and notes, like "F-150 4x4" or "Explorer AWD".</p>`:""}`;
-  box.querySelector("[data-tmin]").onclick=()=>{box.classList.toggle("min");renderTips()};
-  box.querySelector("[data-tclose]").onclick=()=>$("tipsBtn").click();
-  box.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{const id=b.dataset.go,s=spotById[id];if(s&&!s.zone.holding)zoomTo(s.zone,()=>openSheet(id));else openSheet(id)});
-}
-$("tipsBtn").onclick=()=>{
-  tipMode=!tipMode; $("tipsBtn").setAttribute("aria-pressed",String(tipMode));
-  $("tips").hidden=!tipMode; $("tips").classList.remove("min"); $("mapwrap").classList.toggle("tipping",tipMode);
-  if(tipMode)renderTips(); paint();
-};
 function setLabels(on){
   labelsOn=on; $("labelsBtn").setAttribute("aria-pressed",String(on));
   $("mapwrap").classList.toggle("nolabels",!on);
@@ -2164,7 +2074,7 @@ function guideRows(){
   return Object.entries(data).filter(([id,v])=>needsGuide(id,v)).sort((a,b)=>(order[a[0]]??1e9)-(order[b[0]]??1e9));
 }
 const printable=v=>{const p=parseVeh(v);return String(v.vin||"").length===17&&p.year&&p.make&&p.model};
-function renderGuidesLight(){const n=Object.entries(data).filter(([id,v])=>missingGuide(id,v)).length,b=$("guidesBadge");b.hidden=!n;b.textContent=n;b.style.background="var(--tipc)";if(!$("guidesView").hidden)renderGuides()}
+function renderGuidesLight(){const n=Object.entries(data).filter(([id,v])=>missingGuide(id,v)).length,b=$("guidesBadge");b.hidden=!n;b.textContent=n;b.style.background="var(--muted)";if(!$("guidesView").hidden)renderGuides()}
 function renderGuides(){
   const rows=guideRows(), miss=rows.filter(([,v])=>!v.guidePhoto), unprinted=rows.filter(([,v])=>!v.guidePrinted), show=$("gShow").value;
   $("gSum").innerHTML=`<span>Used vehicles <b>${rows.length}</b></span><span>Guide photo posted <b>${rows.length-miss.length}</b></span><span>Missing a photo <b>${miss.length}</b></span><span>Not printed yet <b>${unprinted.length}</b></span>`;
@@ -2466,7 +2376,7 @@ function renderCheckLight(){
   lastCheck=runCheck();
   const flagged=lastCheck.filter(x=>x.f.length);
   checkKeys=new Set(flagged.filter(x=>x.id&&(checkShow==="all"||x.f.includes(checkShow))).map(x=>vKey(x.v)).filter(Boolean));
-  const b=$("checkBadge"); b.hidden=!flagged.length; b.textContent=flagged.length; b.style.background="var(--s-hold)";
+  const b=$("checkBadge"); b.hidden=!flagged.length; b.textContent=flagged.length; b.style.background="var(--muted)";
   if(!$("checkView").hidden)renderCheck();
 }
 function renderCheck(){

@@ -13,7 +13,7 @@ The whole app is a single page: `index.html`.
 - Buyers Guide photos and printing for used units
 - vAuto check: import the daily vAuto inventory export (CSV or Excel) and see what's flagged — cars not found on the lot, cars missing from vAuto, too few photos, no price, aging, sold but still listed, no Buyers Guide photo. The import stays on the device; no API
 - The Ark: storm lockdown. Lines up the most valuable cars to move inside (shop, detail, showroom, service drive), remembers where each came from, and walks you through putting them back after
-- Season tips, seasonal tree colors, a 3D view, and layouts for phone, tablet and desktop
+- A 3D view (with seasonal colors) and layouts for phone, tablet and desktop
 
 ## Running it
 Open `index.html` in a browser, or serve the folder with any static host (for example GitHub Pages).
