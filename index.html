@@ -372,6 +372,7 @@ html[data-device="phone"] .list tr{display:grid;grid-template-columns:1fr 1fr;ga
 html[data-device="phone"] .list td{display:grid;gap:2px;padding:0;border:0;white-space:normal;font-size:15px;min-width:0}
 html[data-device="phone"] .list td::before{content:attr(data-label);font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-family:var(--f-ui)}
 html[data-device="phone"] .list td:empty{display:none}
+html[data-device="phone"] .list td>*{justify-self:start}
 
 /* desktop */
 html[data-device="desktop"]{--dockh:16px}
@@ -480,6 +481,40 @@ html[data-device="phone"] .mtool svg{width:17px;height:17px}
 .asec{margin:6px 0 0;font-size:16px;color:var(--muted);font-weight:600}
 .chip.arkchip[aria-pressed="true"]{border-color:var(--s-demo);box-shadow:inset 0 0 0 1px var(--s-demo)}
 html[data-device="phone"] .xcards,html[data-device="phone"] .acards{grid-template-columns:1fr}
+
+/* ---- spacing & alignment pass: one control height, one rhythm ---- */
+:root{--ctl:52px;--ctl-s:44px}
+.btn{min-height:var(--ctl);display:inline-flex;align-items:center;justify-content:center;gap:8px;line-height:1.2}
+label input,label select,.kgive input,.kctl select,.gtools select{min-height:var(--ctl)}
+.kctl select,.gtools select{padding:0 12px}
+#kGive{display:grid;gap:12px}
+.kquick{gap:8px}
+.kquick button{min-height:var(--ctl-s);padding:0 16px;font-size:15px}
+.kgive{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;flex-wrap:nowrap}
+.kgive input{min-width:0;width:100%}
+.kret{display:grid;grid-template-columns:1fr auto;gap:8px}
+#xBody,#aBody{display:grid;gap:14px;align-content:start}
+#checkView,#arkView{gap:16px}
+.xtools .btn,.xhead .btn,.abtns .btn{min-height:var(--ctl-s);padding:0 16px;font-size:15px}
+.xcard{gap:8px}
+.asec{margin:6px 0 -4px}
+.acard{display:block;padding:14px 16px}
+.acard>div{display:grid;gap:8px}
+.ahead{display:flex;align-items:center;gap:12px;min-width:0}
+.ahead>div{min-width:0}
+.ahead b{display:block;font-size:17px}
+.ahead .meta{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.anum{width:34px;height:34px;flex:none;font-size:15px}
+.aroute{margin-top:2px}
+.abtns{display:grid;grid-template-columns:1fr auto auto;gap:8px;margin-top:4px}
+.abtns .btn:only-child{grid-column:1/-1}
+html[data-device="phone"] .kgive,html[data-device="phone"] .kret{grid-template-columns:1fr}
+html[data-device="phone"] .xchips{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1*var(--gut));padding:2px var(--gut)}
+html[data-device="phone"] .xchips::-webkit-scrollbar{display:none}
+html[data-device="phone"] .xchips .chip{flex:none}
+html[data-device="phone"] .xtools{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:8px}
+html[data-device="phone"] .xtools .btn{padding:0 8px;white-space:nowrap}
+html[data-device="phone"] .xhead{width:100%;display:grid;grid-template-columns:auto 1fr;gap:8px}
 </style>
 
 <div class="app">
@@ -2412,7 +2447,7 @@ function renderCheck(){
     <div class="xchips"><button class="chip" type="button" data-show="all" aria-pressed="${checkShow==="all"}">Everything flagged <b>${flagged.length}</b></button>${
       order.filter(k=>counts[k]).map(k=>`<button class="chip" type="button" data-show="${k}" aria-pressed="${checkShow===k}" title="${esc(FLAGS[k].tip)}"><span class="sw" style="background:var(${FLAGS[k].c})"></span>${FLAGS[k].l} <b>${counts[k]}</b></button>`).join("")}</div>
     ${checkShow!=="all"?`<p class="meta" style="margin:0">${esc(FLAGS[checkShow].tip)}</p>`:""}
-    <div class="xtools"><button class="btn" type="button" id="xMap" aria-pressed="${checkFilter}">${checkFilter?"Showing on the map":"Show on the map"}</button><button class="btn" type="button" id="xExport">Export list</button>${fill.length&&!readOnly?`<button class="btn" type="button" id="xFill">Fill in blanks on ${fill.length} car${fill.length>1?"s":""}</button>`:""}${vx.demo?'<button class="btn" type="button" id="xDemoOff">Clear demo</button>':""}</div>
+    <div class="xtools"><button class="btn" type="button" id="xMap" aria-pressed="${checkFilter}">${checkFilter?"On the map":"Show on map"}</button><button class="btn" type="button" id="xExport">Export list</button>${fill.length&&!readOnly?`<button class="btn" type="button" id="xFill">Fill in blanks on ${fill.length} car${fill.length>1?"s":""}</button>`:""}${vx.demo?'<button class="btn" type="button" id="xDemoOff">Clear demo</button>':""}</div>
     <div class="xcards">${list.length?list.map(x=>{const v=x.v||{},r=x.r||{},c=FLAGS[x.f[0]].c;
       return `<div class="xcard" style="border-left-color:var(${c})" ${x.id?`data-open="${esc(x.id)}" role="button" tabindex="0"`:""}>
         <b>${esc(r.stock||v.stock||"No stock #")}</b>
@@ -2508,7 +2543,7 @@ function renderArkLight(){
 }
 function renderArk(){
   const p=arkPlan(), box=$("aBody"), btns=$("aHeadBtns"), inN=p.inside.length;
-  const car=(v)=>`<b>${esc(v.stock||"No stock #")}</b> <span class="meta">${esc(v.desc||"")}${v.color?" · "+esc(v.color):""}</span>`;
+  const car=(v,n)=>`<div class="ahead"><div class="anum">${n}</div><div><b>${esc(v.stock||"No stock #")}</b><div class="meta">${esc(v.desc||"")}${v.color?" · "+esc(v.color):""}</div></div></div>`;
   if(!ark.on&&!inN){
     btns.innerHTML="";
     box.innerHTML=`<div class="xnote"><h3>Big storm coming?</h3>
@@ -2525,13 +2560,13 @@ function renderArk(){
     box.innerHTML=`<div class="xnote"><div class="xnums" style="color:var(--ink);font-size:15px"><span>Started ${esc(fmtTime(ark.since))}</span><span><b>${inN}</b> moved in</span><span><b>${p.free}</b> open inside</span><span><b>${p.wait.length}</b> won't fit</span></div>
       <div class="abar" aria-label="Building ${pct}% full"><span style="width:${pct}%"></span></div><p class="meta">Building ${pct}% full. Drive each car to its spot, then tap <b>Moved in</b>.</p></div>
       <h3 class="asec">Next in (${p.go.length})</h3>
-      <div class="acards">${p.go.length?p.go.map((x,i)=>`<div class="acard"><div class="anum">${i+1}</div><div>${car(x.v)}
-        <div class="aroute">${esc(spotName(x.id))} <span>→</span> ${esc(spotName(x.to))}</div><div class="xtags" style="margin-top:4px">${arkTags(x.v)}</div>
+      <div class="acards">${p.go.length?p.go.map((x,i)=>`<div class="acard"><div>${car(x.v,i+1)}
+        <div class="aroute">${esc(spotName(x.id))} <span>→</span> ${esc(spotName(x.to))}</div><div class="xtags">${arkTags(x.v)}</div>
         <div class="abtns"><button class="btn primary" type="button" data-in="${esc(x.id)}" data-to="${esc(x.to)}"${readOnly?" disabled":""}>Moved in</button><button class="btn apin" type="button" data-pin="${esc(vKey(x.v))}" aria-pressed="${(ark.pin||[]).includes(vKey(x.v))}">${(ark.pin||[]).includes(vKey(x.v))?"Pinned":"Pin"}</button><button class="btn" type="button" data-skip="${esc(vKey(x.v))}">Leave out</button></div></div></div>`).join("")
         :`<div class="empty" style="grid-column:1/-1;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)">${p.free?"Every car is inside.":"The building is full."}</div>`}</div>
-      ${p.wait.length?`<h3 class="asec">Won't fit (${p.wait.length}) · pin one to swap it into the list</h3><div class="acards">${p.wait.map(([id,v])=>`<div class="acard out"><div class="anum">–</div><div>${car(v)}<div class="aroute">${esc(spotName(id))}</div><div class="xtags" style="margin-top:4px">${arkTags(v)}</div><div class="abtns"><button class="btn apin" type="button" data-pin="${esc(vKey(v))}" aria-pressed="false">Pin it in</button></div></div></div>`).join("")}</div>`:""}
-      ${p.skipped.length?`<h3 class="asec">Left out (${p.skipped.length})</h3><div class="acards">${p.skipped.map(([id,v])=>`<div class="acard out"><div class="anum">×</div><div>${car(v)}<div class="aroute">${esc(spotName(id))}</div><div class="abtns"><button class="btn" type="button" data-unskip="${esc(vKey(v))}">Put back on the list</button></div></div></div>`).join("")}</div>`:""}
-      ${inN?`<h3 class="asec">Inside (${inN})</h3><div class="acards">${p.inside.map(([id,v])=>`<div class="acard"><div class="anum">✓</div><div>${car(v)}<div class="aroute">${esc(spotName(id))} <span>· from ${esc(spotName(v.arkFrom))}</span></div></div></div>`).join("")}</div>`:""}`;
+      ${p.wait.length?`<h3 class="asec">Won't fit (${p.wait.length}) · pin one to swap it into the list</h3><div class="acards">${p.wait.map(([id,v])=>`<div class="acard out"><div>${car(v,"–")}<div class="aroute">${esc(spotName(id))}</div><div class="xtags">${arkTags(v)}</div><div class="abtns"><button class="btn apin" type="button" data-pin="${esc(vKey(v))}" aria-pressed="false">Pin it in</button></div></div></div>`).join("")}</div>`:""}
+      ${p.skipped.length?`<h3 class="asec">Left out (${p.skipped.length})</h3><div class="acards">${p.skipped.map(([id,v])=>`<div class="acard out"><div>${car(v,"×")}<div class="aroute">${esc(spotName(id))}</div><div class="abtns"><button class="btn" type="button" data-unskip="${esc(vKey(v))}">Put back on the list</button></div></div></div>`).join("")}</div>`:""}
+      ${inN?`<h3 class="asec">Inside (${inN})</h3><div class="acards">${p.inside.map(([id,v])=>`<div class="acard"><div>${car(v,"✓")}<div class="aroute">${esc(spotName(id))} <span>· from ${esc(spotName(v.arkFrom))}</span></div></div></div>`).join("")}</div>`:""}`;
     $("aClear").onclick=async()=>{ark={...ark,on:false,skip:[],pin:[]};await saveArk();paint();renderArk();toast(inN?"All clear. Move cars back out.":"Ark ended")};
     $("aExport").onclick=()=>saveCsv(`ark-load-list-${new Date().toISOString().slice(0,10)}.csv`,[["Order","Stock #","Vehicle","Color","From","To","Keys","Status"],
       ...p.go.map((x,i)=>[i+1,x.v.stock,x.v.desc,x.v.color,spotName(x.id),spotName(x.to),x.v.keys?"Out: "+(x.v.keys.holder||""):"In box",(ST[x.v.status]||ST.avail).label])]);
@@ -2540,8 +2575,8 @@ function renderArk(){
   // storm over, cars still inside: unload
   btns.innerHTML=`<button class="btn" type="button" id="aDone"${readOnly?" disabled":""}>Mark all back out</button>`;
   box.innerHTML=`<div class="xnote"><h3>All clear: ${inN} car${inN===1?"":"s"} to move back out</h3><p class="meta">Each car goes back to the spot it came from. If someone parked there since, it goes to an open spot in the same row, or to Holding.</p></div>
-    <div class="acards">${p.inside.map(([id,v],i)=>{const to=backSpot(id,v);return `<div class="acard"><div class="anum">${i+1}</div><div>${car(v)}
-      <div class="aroute">${esc(spotName(id))} <span>→</span> ${to?esc(spotName(to)):"no open spot"}${to&&to!==v.arkFrom?` <span>(was ${esc(spotName(v.arkFrom))})</span>`:""}</div><div class="xtags" style="margin-top:4px">${arkTags(v)}</div>
+    <div class="acards">${p.inside.map(([id,v],i)=>{const to=backSpot(id,v);return `<div class="acard"><div>${car(v,i+1)}
+      <div class="aroute">${esc(spotName(id))} <span>→</span> ${to?esc(spotName(to)):"no open spot"}${to&&to!==v.arkFrom?` <span>(was ${esc(spotName(v.arkFrom))})</span>`:""}</div><div class="xtags">${arkTags(v)}</div>
       <div class="abtns">${to?`<button class="btn primary" type="button" data-out="${esc(id)}" data-to="${esc(to)}"${readOnly?" disabled":""}>Moved out</button>`:""}<button class="btn" type="button" data-stay="${esc(id)}"${readOnly?" disabled":""}>Leave it inside</button></div></div></div>`}).join("")}</div>`;
   $("aDone").onclick=async()=>{if(readOnly)return;let n=0;for(const [id,v] of arkPlan().inside){const to=backSpot(id,v);if(to&&await arkMove(id,to,null))n++}toast(`Moved ${n} car${n===1?"":"s"} back on the map`);renderArk()};
 }
