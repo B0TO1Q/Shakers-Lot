@@ -902,11 +902,12 @@ function drawInterior(svg){
   // sales desks along the front glass, west and east of the entrance
   [770,798].forEach(y=>[1050,1214,1262,1310].forEach(x=>{R(x,y+6,34,10,{fill:"var(--office)",stroke:"var(--wall)","stroke-width":1,rx:2});
     el("circle",{cx:x+17,cy:y,r:3.2,fill:"var(--muted)",opacity:.6},g);}));
-  // lounge against the back wall: couches in a U around a TV, coffee bar
+  // lounge behind reception: couches in a U against the back wall, opening toward the front,
+  // TV on the back of the reception wall facing them, coffee bar in the corner
   R(1110,664,92,34,{fill:"var(--tile)"});
   [[1110,664,1110,698],[1202,664,1202,698]].forEach(([a,b,c,d])=>el("line",{x1:a,y1:b,x2:c,y2:d,stroke:"var(--wall)","stroke-width":2},g));
-  R(1144,666,24,2.5,{fill:"var(--ink)",rx:1});                                   // TV
-  [[1133,671,5,20],[1174,671,5,20],[1133,691,46,5]].forEach(([x,y,w,h])=>R(x,y,w,h,{fill:"#2f3337",rx:1.5}));
+  R(1144,695,24,2.5,{fill:"var(--ink)",rx:1});                                   // TV
+  [[1133,666,46,5],[1133,666,5,20],[1174,666,5,20]].forEach(([x,y,w,h])=>R(x,y,w,h,{fill:"#2f3337",rx:1.5}));
   R(1149,677,14,7,{fill:"none",stroke:"var(--wall)","stroke-width":1,rx:1});
   R(1113,667,16,5,{fill:"var(--office)",stroke:"var(--wall)","stroke-width":.8});      // coffee bar
   L(1156,662,"LOUNGE",{class:"room sm"});
@@ -1651,8 +1652,8 @@ function build3D(){
    block(R(1112,724,88,98),0.3,M.drain,0.45);                                  // black tile entry
    wall(1110,664,1110,698,14,M.bldg,2); wall(1202,664,1202,698,14,M.bldg,2);   // lounge
    block(R(1139,699,34,4),20,wood);                                            // reception backdrop
-   block(R(1144,665,24,2.5),10,M.drain,4);                                      // TV
-   [[1133,671,5,20],[1174,671,5,20],[1133,691,46,5]].forEach(([x,y,w,h])=>block(R(x,y,w,h),4,dark));
+   block(R(1144,695,24,2.5),10,M.drain,4);                                      // TV
+   [[1133,666,46,5],[1133,666,5,20],[1174,666,5,20]].forEach(([x,y,w,h])=>block(R(x,y,w,h),4,dark));
    block([[1138,710],[1174,710],[1174,714],[1156,719],[1138,714]],6,wood);       // reception desk
    block(R(1346,668,5,30),22,wood); block(R(1346,706,5,24),22,wood);            // Lincoln portal
    [1446,1476].forEach(x=>block(R(x,702,29,26),12,M.office));                   // finance offices
