@@ -916,9 +916,9 @@ function drawInterior(svg){
   el("circle",{cx:1156,cy:707,r:3,fill:"var(--muted)",opacity:.8},g);
   el("path",{d:"M1138 710 H1174 V714 Q1156 722 1138 714 Z",fill:"#4a2a26",stroke:"var(--wall)","stroke-width":.8},g);
   // black tile entry from the main doors to reception, with the walk-off mat
-  R(1112,724,88,98,{fill:"#24282c",opacity:.85});
-  for(let x=1122;x<1200;x+=10)el("line",{x1:x,y1:724,x2:x,y2:822,stroke:"#3a4046","stroke-width":.6},g);
-  for(let y=734;y<822;y+=10)el("line",{x1:1112,y1:y,x2:1200,y2:y,stroke:"#3a4046","stroke-width":.6},g);
+  R(1126,724,60,98,{fill:"#24282c",opacity:.85});                               // 6 tiles wide
+  for(let x=1136;x<1186;x+=10)el("line",{x1:x,y1:724,x2:x,y2:822,stroke:"#3a4046","stroke-width":.6},g);
+  for(let y=734;y<822;y+=10)el("line",{x1:1126,y1:y,x2:1186,y2:y,stroke:"#3a4046","stroke-width":.6},g);
   R(1146,790,20,26,{fill:"#3d434a",rx:1});
   // Lincoln display portal (dark wood) between the Ford cars and the Lincoln cars
   R(1346,668,5,30,{fill:"#4a2a26"}); R(1346,706,5,24,{fill:"#4a2a26"});
@@ -1649,7 +1649,7 @@ function build3D(){
   block(R(870,448,92,72),14,M.office);
   [1046,1212,1262].forEach(x=>block(R(x,668,46,22),12,M.office));
   {const wood=mat("#4a2a26"), dark=mat("#2f3337");
-   block(R(1112,724,88,98),0.3,M.drain,0.45);                                  // black tile entry
+   block(R(1126,724,60,98),0.3,M.drain,0.45);                                  // black tile entry
    wall(1110,664,1110,698,14,M.bldg,2); wall(1202,664,1202,698,14,M.bldg,2);   // lounge
    block(R(1139,699,34,4),20,wood);                                            // reception backdrop
    block(R(1144,695,24,2.5),10,M.drain,4);                                      // TV
