@@ -1846,7 +1846,7 @@ let userApi=null, me={id:null,name:""}, keylog=[], downloadsApi=null;
 const LSK="shakers-keylog-v1";
 function kLoad(){try{return JSON.parse(localStorage.getItem(LSK)||"[]")}catch(e){return []}}
 function kSave(){try{localStorage.setItem(LSK,JSON.stringify(keylog.slice(0,1000)))}catch(e){}}
-const QUICK=["Test drive","Service","Detail","Body shop"];
+const QUICK=["Test drive","Service","Detail","Quick Lane","LINE-X","Body shop"];
 function fmtTime(t){return new Date(t).toLocaleString([],{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})}
 function ago(t){const m=Math.max(0,Math.round((Date.now()-t)/60000));if(m<1)return "just now";if(m<60)return m+" min";const h=Math.floor(m/60);if(h<24)return h+" hr"+(m%60?" "+(m%60)+" min":"");return Math.floor(h/24)+" day"+(h>=48?"s":"")}
 const LATE_MIN=120;
