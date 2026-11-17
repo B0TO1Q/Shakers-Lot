@@ -759,7 +759,6 @@ const ZONES = [
   {id:"Z11",n:6, x:1356, y:752, w:164, h:76, lbl:"top", lblAt:[1438,760], name:"SIDEWALK", area:"Display pad · lined up with the stalls in front",
    cells:Array.from({length:6},(_,k)=>[1356+k*164/6,776,164/6,50,0])},
   {id:"Z10",n:3,  x:1268, y:858, w:82,  h:46, lbl:"below", name:"FRONT PAD", area:"Canopy wedge"},
-  {id:"Z13",n:10, x:1010, y:962, w:270, h:54, lbl:"top", area:"Front row"},
   // Ford pylon island (gravel): two cars, both west (left) of the pole
   {id:"Z9", n:2,  x:1283, y:994, w:50,  h:46, lbl:"below", name:"FORD SIGN", area:"Ford sign island · left of the pole", cells:[
     [1284,995,22,44,0],[1308,995,22,44,0]]},
@@ -1058,8 +1057,11 @@ function drawMap(){
      el("rect",{x:x-1,y:y0-6,width:2,height:6,fill:"var(--muted)"},CP)};
    hatch(4);ada(3);ada(5); hatch(8);ada(7); ada(9);
    T(1050,940,"CUSTOMER PARKING","zcount",{"text-anchor":"middle"});}
-  // 6 employee/customer stalls in front of the Sidewalk pad (not inventory, left unlabeled)
-  {const EP=el("g",{class:"lm"},svg); for(let i=0;i<=6;i++)el("line",{x1:1356+i*164/6,y1:838,x2:1356+i*164/6,y2:884,stroke:"var(--surface)","stroke-width":2,opacity:.85},EP);}
+  // Unlabeled stalls (not inventory): 6 employee/customer stalls in front of the Sidewalk pad, and the
+  // 10-stall front row west of the Ford sign (customers and outgoing vehicles)
+  {const EP=el("g",{class:"lm"},svg);
+   for(let i=0;i<=6;i++)el("line",{x1:1356+i*164/6,y1:838,x2:1356+i*164/6,y2:884,stroke:"var(--surface)","stroke-width":2,opacity:.85},EP);
+   for(let i=0;i<=10;i++)el("line",{x1:1010+i*27,y1:962,x2:1010+i*27,y2:1016,stroke:"var(--surface)","stroke-width":2,opacity:.85},EP);}
 
   // ---- Sign islands at the Route 63 frontage, from street photos ----
   // Ford pylon: tall pole with the oval sign, on a gravel island with display trucks around it
