@@ -755,28 +755,26 @@ const ZONES = [
     [1043,700,25,44,0,1],[1071,700,25,44,0,2],[1099,700,25,44,0,3],[1226,700,28,46,0,4],
     [1356,680,26,44,0,6],[1385,680,26,44,0,7],[1414,680,26,44,0,8],[1282,700,28,46,0,5]]},
   // Front of the building
-  // Sidewalk display pad: everything centered on the pad's midline (x 1438).
-  // Back row: 2 cars parked side by side. Front row: 4 cars angled at 35°, evenly spaced.
-  {id:"Z11",n:6, x:1350, y:742, w:176, h:90, lbl:"top", lblAt:[1400,742], name:"SIDEWALK", area:"Display pad", cells:[
-    [1378,749,56,25,0],[1442,749,56,25,0],
-    [1370,783,22,40,35],[1408,783,22,40,35],[1446,783,22,40,35],[1484,783,22,40,35]]},
+  // Sidewalk display pad: one straight row of 6, no angles, each car lined up with the Z14 spot in front of it.
+  {id:"Z11",n:6, x:1356, y:752, w:164, h:76, lbl:"top", lblAt:[1438,760], name:"SIDEWALK", area:"Display pad · lined up with Z14",
+   cells:Array.from({length:6},(_,k)=>[1356+k*164/6,776,164/6,50,0])},
   {id:"Z14",n:6,  x:1356, y:838, w:164, h:46, lbl:"below", area:"Display pad"},
   {id:"Z10",n:3,  x:1268, y:858, w:82,  h:46, lbl:"below", name:"FRONT PAD", area:"Canopy wedge"},
   {id:"Z13",n:10, x:1010, y:962, w:270, h:54, lbl:"top", area:"Front row"},
-  // Ford pylon island (gravel): two trucks west of the pole, one east of it
-  {id:"Z9", n:3,  x:1283, y:994, w:76,  h:46, lbl:"below", name:"FORD SIGN", area:"Ford sign island", cells:[
-    [1284,995,22,44,0],[1307,995,22,44,0],[1338,995,20,44,0]]},
+  // Ford pylon island (gravel): two cars, both west (left) of the pole
+  {id:"Z9", n:2,  x:1283, y:994, w:50,  h:46, lbl:"below", name:"FORD SIGN", area:"Ford sign island · left of the pole", cells:[
+    [1284,995,22,44,0],[1308,995,22,44,0]]},
   {id:"Z1", n:15, x:1362, y:962, w:380, h:54, lbl:"top", name:"ZONE 1", area:"Front row"},
   // East lot
-  {id:"Z6", n:11, x:1586, y:486, w:300, h:50, lbl:"below", area:"East lot"},
+  {id:"Z6", n:8,  x:1586, y:486, w:218, h:50, lbl:"below", area:"East lot · along the wall"},
   {id:"Z5", n:7,  x:1596, y:602, w:180, h:50, lbl:"left", area:"East lot"},
   {id:"Z4", n:7,  x:1596, y:652, w:180, h:50, lbl:"left", area:"East lot"},
   {id:"Z3", n:7,  x:1596, y:772, w:180, h:50, lbl:"left", area:"East lot"},
   {id:"Z2", n:7,  x:1596, y:822, w:180, h:50, lbl:"left", area:"East lot"},
   {id:"Z7", n:16, dir:"v", x:1846, y:612, w:64, h:388, lbl:"top", name:"Z7 TRUCKS", area:"Truck line"},
-  // Lincoln monument sign on a grass island: one vehicle on each side of the sign
-  {id:"Z12",n:2,  x:1800, y:1010, w:116, h:54, lbl:"left", name:"LINCOLN SIGN", area:"Lincoln sign island", cells:[
-    [1801,1012,30,52,0],[1884,1012,30,52,0]]},
+  // Lincoln monument sign on a grass island: 1 = behind the sign (north), 2 = in front of it (toward Route 63)
+  {id:"Z12",n:2,  x:1806, y:1006, w:104, h:86, lbl:"left", name:"LINCOLN SIGN", area:"Lincoln sign island · behind & in front", cells:[
+    [1830,1008,54,26,0],[1830,1064,54,26,0]]},
 ];
 const HOLD = {id:"H", n:20, holding:true};
 const STATUS = [
@@ -1066,8 +1064,8 @@ function drawMap(){
   // Ford pylon: tall pole with the oval sign, on a gravel island with display trucks around it
   el("rect",{x:1281,y:990,width:80,height:54,rx:9,fill:"var(--gravel)",stroke:"var(--wall)","stroke-width":2},svg);
   // Lincoln monument: black sign cabinet with the star and LINCOLN, white base, on a landscaped grass island
-  el("rect",{x:1793,y:1004,width:130,height:68,rx:14,fill:"var(--grass)",stroke:"var(--wall)","stroke-width":2},svg);
-  [[1838,1060,5],[1878,1060,6],[1852,1066,4],[1866,1058,4]].forEach(([cx,cy,r])=>el("circle",{cx,cy,r,fill:"url(#foliage)",opacity:.9},svg));
+  el("rect",{x:1793,y:1004,width:130,height:90,rx:14,fill:"var(--grass)",stroke:"var(--wall)","stroke-width":2},svg);
+  [[1810,1044,6],[1819,1054,4],[1904,1044,6],[1895,1054,4]].forEach(([cx,cy,r])=>el("circle",{cx,cy,r,fill:"url(#foliage)",opacity:.9},svg));
 
   // ---- Side pad (west corner) — details from site photos ----
   // Raised, curbed asphalt island at the Route 63 exit; rounded corner toward the road.
@@ -1140,10 +1138,10 @@ function drawMap(){
    el("circle",{cx:1333.5,cy:1031,r:2.2,fill:"var(--wall)",stroke:"var(--ink)","stroke-width":.6},SG);   // pylon pole
    ovalBadge(SG,1333.5,1017,6.6,4.2);
    [[1284,992],[1358,1042]].forEach(([cx,cy])=>el("circle",{cx,cy,r:2.4,fill:"var(--surface)",stroke:"var(--wall)","stroke-width":1.2},SG)); // light poles
-   el("rect",{x:1836,y:1026,width:42,height:14,rx:1.5,fill:"#1d2023"},SG);
-   el("rect",{x:1836,y:1040,width:42,height:4,fill:"#eef0f1",stroke:"#9aa2a7","stroke-width":.5},SG);
-   lincolnStar(SG,1843,1033,3.6,"#e9ecee");
-   const t=el("text",{x:1862,y:1035.2,"text-anchor":"middle",class:"lm-inv",style:"fill:#e9ecee;font-size:5.4px;letter-spacing:.14em"},SG);t.textContent="LINCOLN";}
+   el("rect",{x:1836,y:1040,width:42,height:14,rx:1.5,fill:"#1d2023"},SG);
+   el("rect",{x:1836,y:1054,width:42,height:4,fill:"#eef0f1",stroke:"#9aa2a7","stroke-width":.5},SG);
+   lincolnStar(SG,1843,1047,3.6,"#e9ecee");
+   const t=el("text",{x:1862,y:1049.2,"text-anchor":"middle",class:"lm-inv",style:"fill:#e9ecee;font-size:5.4px;letter-spacing:.14em"},SG);t.textContent="LINCOLN";}
   // zone labels + tap targets
   function tag(x,cy,text,anchor,cls){
     const H=22,g=el("g",{class:cls||"ztag"},svg),r=el("rect",{rx:5,height:H,y:cy-H/2},g);
@@ -1707,8 +1705,8 @@ function build3D(){
    const disc=new T.Mesh(new T.CylinderGeometry(1,1,3,40),new T.MeshLambertMaterial({color:0x1f3c88})); disc.scale.set(16,1,10); disc.rotation.x=Math.PI/2; disc.position.set(px,74,pz); disc.castShadow=true; scene.add(disc);
    const face=textPlane("Ford",200,110,"#ffffff"); face.scale.set(.12,.12,1); face.position.set(px,74,pz+1.8); scene.add(face);}
   block([[1281,990],[1361,990],[1361,1044],[1281,1044]],0.6,M.gravel);
-  block([[1793,1004],[1923,1004],[1923,1072],[1793,1072]],0.6,M.lawn);
-  block(R(1836,1040,42,4),8,M.canopy); block(R(1836,1028,42,10),24,M.monument,8);
+  block([[1793,1004],[1923,1004],[1923,1094],[1793,1094]],0.6,M.lawn);
+  block(R(1836,1054,42,4),8,M.canopy); block(R(1836,1042,42,10),24,M.monument,8);
   block([[140,412],[445,412],[445,570],[300,570],[300,872],[140,872]],32,M.neighbor);
   block(R(1530,472,376,8),20,M.wall);
   block(R(720,428,50,30),16,M.dump); block(R(1528,496,50,30),16,M.dump);
