@@ -8,7 +8,7 @@
   --spotline:#b9c0c5; --paint:#f2c230; --accent:#1f5fa8; --bldg:#5b6369; --roof-ink:#f1f3f4; --wall:#9aa2a7; --neighbor:#c4cacf; --pad:#e3d6bb;
   --shop:#cfd3d6; --tower:#c3c8cc; --gravel:#cfc6b6; --tile:#eeebe4; --lift:#2b5ea7; --glass:#8fc3e6; --drain:#3a4045; --office:#dfe3e6;
   --leaf1:#6f9a5e; --leaf2:#4f7d45; --leaf3:#8db376; --lawn:#c9dcbc; --wood:#e2e6df; --grass:#e9ece5;
-  --ev:#14967f; --keyc:#c2410c; --keybg:#fff1e6; --lowc:#b91c1c; --lowbg:#fde8e8; --dumpster:#3d6b4f; --tipc:#c26a1f; --staff:rgba(120,130,140,.10);
+  --plow:#d0570f; --ev:#14967f; --keyc:#c2410c; --keybg:#fff1e6; --lowc:#b91c1c; --lowbg:#fde8e8; --dumpster:#3d6b4f; --tipc:#c26a1f; --staff:rgba(120,130,140,.10);
   --s-avail:#2f8f5b; --s-sold:#7a4cc2; --s-svc:#d9822b; --s-hold:#c23b3b; --s-demo:#2c7fb8; --s-empty:#f8f9fa;
   --f-ui:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --f-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
@@ -439,6 +439,27 @@ html[data-device="desktop"] .kbd{display:inline-block}
 .mapwrap{position:relative}
 .maptools{position:absolute;top:10px;right:10px;z-index:5;display:flex;gap:6px}
 .mapwrap.full .maptools{display:none}
+/* plow route layer */
+.plow{display:none;pointer-events:none}
+.mapwrap.plowing .plow{display:inline}
+.pr{fill:none;stroke:var(--plow);stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.pr.thin{stroke-width:3.5}
+.prh{fill:var(--plow)}
+.pnum circle{fill:var(--plow);stroke:var(--surface);stroke-width:2}
+.pnum text{fill:#fff;font:800 12px var(--f-ui);text-anchor:middle}
+.ppile{fill:url(#pileHatch);stroke:var(--plow);stroke-width:2;stroke-dasharray:6 4}
+.ppile-t{fill:var(--plow);font:800 11px var(--f-ui);text-anchor:middle;letter-spacing:.06em;paint-order:stroke;stroke:var(--asphalt);stroke-width:3px}
+.pno{fill:#c8102e;font:800 10px var(--f-ui);text-anchor:middle;letter-spacing:.08em;paint-order:stroke;stroke:var(--asphalt);stroke-width:3px}
+.plowcard{position:absolute;left:10px;top:10px;z-index:5;width:min(330px,calc(100% - 20px));max-height:calc(100% - 20px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;font-size:14px;display:grid;gap:8px}
+.plowcard h3{margin:0;font-size:16px;display:flex;align-items:center;gap:8px}
+.plowcard h3 button{margin-left:auto;min-height:32px;min-width:32px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;font-size:15px}
+.plowcard ol{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.plowcard li{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;line-height:1.3}
+.plowcard li span{width:22px;height:22px;border-radius:50%;background:var(--plow);color:#fff;font:800 12px/22px var(--f-ui);text-align:center}
+.plowcard .warn{color:#c8102e;font-weight:700;font-size:13px}
+.plowcard.min ol,.plowcard.min .warn,.plowcard.min .meta{display:none}
+.mapwrap.full .plowcard{display:none}
+html[data-device="phone"] .plowcard{top:auto;bottom:8px;left:8px;font-size:13px;max-height:55%}
 .mtool{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 14px var(--f-ui);cursor:pointer;box-shadow:var(--shadow)}
 .mtool svg{width:18px;height:18px}
 .mtool[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
@@ -538,7 +559,22 @@ html[data-device="phone"] .xhead{width:100%;display:grid;grid-template-columns:a
         <div class="ztitle" id="zTitle"></div>
         <button class="zbtn" type="button" id="zNext" aria-label="Next zone">›</button>
       </div>
-      <div class="maptools"><button type="button" class="mtool" id="labelsBtn" aria-pressed="true" aria-label="Labels" title="Labels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/></svg><span class="mt-l">Labels</span></button><button type="button" class="mtool" id="open3d" aria-pressed="false" aria-label="3D view" title="3D view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg><span class="mt-l">3D</span></button><button type="button" class="mtool" id="arkBtn" aria-label="Storm lockdown (the Ark)" title="Storm lockdown (the Ark)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15a4 4 0 1 1 .9-7.9A5.5 5.5 0 0 1 18.5 9 3.5 3.5 0 0 1 18 16H7"/><path d="m11 18-1 3M15 18l-1 3"/></svg><span class="mt-l">Storm</span></button></div>
+      <div class="maptools"><button type="button" class="mtool" id="labelsBtn" aria-pressed="true" aria-label="Labels" title="Labels"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/></svg><span class="mt-l">Labels</span></button><button type="button" class="mtool" id="open3d" aria-pressed="false" aria-label="3D view" title="3D view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg><span class="mt-l">3D</span></button><button type="button" class="mtool" id="arkBtn" aria-label="Storm lockdown (the Ark)" title="Storm lockdown (the Ark)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 15a4 4 0 1 1 .9-7.9A5.5 5.5 0 0 1 18.5 9 3.5 3.5 0 0 1 18 16H7"/><path d="m11 18-1 3M15 18l-1 3"/></svg><span class="mt-l">Storm</span></button><button type="button" class="mtool" id="plowBtn" aria-pressed="false" aria-label="Plow route" title="Plow route"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h11V9H8l-3 4H3z"/><circle cx="6" cy="18" r="2"/><circle cx="12" cy="18" r="2"/><path d="m14 11 4-3 3 3-3 3z"/></svg><span class="mt-l">Plow</span></button></div>
+      <section class="plowcard" id="plowCard" hidden aria-label="Plow route">
+        <h3>Plow route <small class="meta" style="font-weight:500">V-plow · main lot</small><button type="button" id="plowMin" aria-label="Shrink">–</button></h3>
+        <ol>
+          <li><span>1</span><div><b>Open the entrances.</b> West exit by the Side Pad and the east entrance by the Lincoln Sign. Stop short of the road, angle the V and roll the snow onto the grass beside the curb cut.</div></li>
+          <li><span>2</span><div><b>Customer stalls &amp; pad aprons.</b> Push straight out into the front aisle before anyone parks.</div></li>
+          <li><span>3</span><div><b>West side aisle.</b> Start below the dumpster, push south into the front aisle.</div></li>
+          <li><span>4</span><div><b>Front aisle, west half.</b> Service door → east, then turn through the empty customer stalls onto the front grass (Pile B). Keep it low.</div></li>
+          <li><span>5</span><div><b>Front aisle, east half.</b> Front Pad → past Zone 1, turn up the truck aisle to the back corner (Pile A).</div></li>
+          <li><span>6</span><div><b>Z3 / Z4 aisle.</b> West → east, then up to Pile A.</div></li>
+          <li><span>7</span><div><b>Z5 / Z6 aisle.</b> West → east into Pile A.</div></li>
+          <li><span>8</span><div><b>Hand finish.</b> Shovel or blow the main doors, side entrance, service door, Sidewalk pad and around the signs. A V can't back-drag.</div></li>
+        </ol>
+        <div class="warn">Never push snow into or across Route 63.</div>
+        <div class="meta">Piles stay off the Zone 1 frontage so the display line is visible from the road.</div>
+      </section>
       <div class="mapbox"><svg id="map" viewBox="0 0 1946 1160" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Lot plan"></svg></div>
       <div class="tray">
         <div class="tlabel">Holding<small>Park cars here while you shuffle</small></div>
@@ -1145,6 +1181,38 @@ function drawMap(){
    el("rect",{x:1836,y:1054,width:42,height:4,fill:"#eef0f1",stroke:"#9aa2a7","stroke-width":.5},SG);
    lincolnStar(SG,1843,1047,3.6,"#e9ecee");
    const t=el("text",{x:1862,y:1049.2,"text-anchor":"middle",class:"lm-inv",style:"fill:#e9ecee;font-size:5.4px;letter-spacing:.14em"},SG);t.textContent="LINCOLN";}
+  // plow route (toggle with the Plow button). Map units; route lines run down the drive aisles.
+  {const ph=el("pattern",{id:"pileHatch",width:8,height:8,patternUnits:"userSpaceOnUse",patternTransform:"rotate(45)"},defs);
+   el("line",{x1:0,y1:0,x2:0,y2:8,stroke:"var(--plow)","stroke-width":2.2,opacity:.45},ph);
+   const P=el("g",{class:"plow",id:"plowLayer"},svg);
+   const route=(d,thin)=>el("path",{d,class:"pr"+(thin?" thin":"")},P);
+   const head=(x,y,ang)=>{const a=ang*Math.PI/180,L=13,W=7,bx=x-L*Math.cos(a),by=y-L*Math.sin(a);
+     el("path",{class:"prh",d:`M${x} ${y} L${bx-W*Math.sin(a)} ${by+W*Math.cos(a)} L${bx+W*Math.sin(a)} ${by-W*Math.cos(a)} Z`},P)};
+   const num=(n,x,y)=>{const g=el("g",{class:"pnum"},P);el("circle",{cx:x,cy:y,r:10},g);const t=el("text",{x,y:y+4},g);t.textContent=n};
+   const pile=(x,y,w,h,label,lx,ly)=>{el("rect",{x,y,width:w,height:h,rx:8,class:"ppile"},P);const t=el("text",{x:lx??x+w/2,y:ly??y+h/2+4,class:"ppile-t"},P);t.textContent=label};
+   // snow piles: A = back NE corner past Z6 (out of sight), B = front grass ahead of the customer stalls
+   pile(1812,488,90,104,"PILE A");
+   pile(958,1024,200,68,"PILE B");
+   // 1 · entrances: roll snow to the grass on both sides, never into the road
+   route("M912 996 V1050 Q912 1066 928 1066 H948",1); head(962,1066,0);
+   route("M1772 1012 V1046 Q1772 1062 1756 1062 H1746",1); head(1732,1062,180);
+   num(1,896,1000); num(1,1756,1004);
+   // 2 · customer stalls + pad aprons, straight out into the front aisle
+   [1000,1090,1180,1240,1390,1470].forEach(x=>{route(`M${x} ${x<1300?868:846} V${x<1300?920:922}`,1);head(x,x<1300?932:934,90)});
+   num(2,1046,862);
+   // 3 · west side aisle, south into the front aisle
+   route("M1530 548 V918"); head(1530,934,90); num(3,1530,532);
+   // 4 · front aisle west half → turn through customer row onto Pile B
+   route("M944 937 H1140 Q1160 937 1160 958 V1018"); head(1160,1034,90); num(4,944,920);
+   // 5 · front aisle east half → truck aisle north → Pile A
+   route("M1190 940 H1790 Q1811 940 1811 918 V612"); head(1811,598,-90); num(5,1206,958);
+   // 6 · Z3/Z4 aisle
+   route("M1530 737 H1790"); head(1804,737,0); num(6,1512,737);
+   // 7 · Z5/Z6 aisle into Pile A
+   route("M1530 569 H1800"); head(1814,569,0); num(7,1512,569);
+   // no snow on Route 63
+   {const t=el("text",{x:1300,y:1118,class:"pno"},P);t.textContent="NO SNOW INTO ROUTE 63";}
+  }
   // zone labels + tap targets
   function tag(x,cy,text,anchor,cls){
     const H=22,g=el("g",{class:cls||"ztag"},svg),r=el("rect",{rx:5,height:H,y:cy-H/2},g);
@@ -1629,6 +1697,15 @@ async function open3D(){
 }
 function close3D(){three.open=false;$("three").hidden=true;if(!zoomed)document.body.classList.remove("zoomed");three.stop&&three.stop();$("t3info").hidden=true}
 $("open3d").onclick=open3D; $("arkBtn").onclick=()=>showView("ark"); $("close3d").onclick=close3D;
+// plow route layer: on/off is remembered per screen
+function setPlow(on){
+  $("mapwrap").classList.toggle("plowing",on); $("plowBtn").setAttribute("aria-pressed",String(on)); $("plowCard").hidden=!on;
+  if(on&&device==="phone"){$("plowCard").classList.add("min");$("plowMin").textContent="+"}
+  try{localStorage.setItem("lot-plow",on?"1":"0")}catch(e){}
+}
+$("plowBtn").onclick=()=>setPlow(!$("mapwrap").classList.contains("plowing"));
+$("plowMin").onclick=()=>{const c=$("plowCard");c.classList.toggle("min");$("plowMin").textContent=c.classList.contains("min")?"+":"–"};
+try{if(localStorage.getItem("lot-plow")==="1")setPlow(true)}catch(e){}
 $("seasonSel").value=seasonPick;
 $("seasonSel").onchange=e=>{seasonPick=e.target.value;try{localStorage.setItem("lot-season",seasonPick)}catch(_){}applySeason()};
 let roofOn=false; try{roofOn=localStorage.getItem("lot-roof")==="1"}catch(e){}
