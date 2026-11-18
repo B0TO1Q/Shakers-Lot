@@ -87,6 +87,7 @@ svg text{font-family:var(--f-ui)}
 .zonehit:hover{fill:rgba(31,95,168,.10);stroke-width:2}
 .mapwrap.full .zonehit{display:none}
 .zlabel{font-weight:600;fill:var(--ink);font-size:14px;letter-spacing:.02em;pointer-events:none}
+.zcat{font-weight:700;fill:var(--accent);font-size:10px;letter-spacing:.07em;pointer-events:none}
 .ztag rect{fill:var(--surface);opacity:.94}
 .ztag{pointer-events:none}
 .evtag rect{fill:var(--ev);opacity:1}
@@ -163,6 +164,7 @@ body.zoomed .dock{display:none}
 .zonelist{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));grid-auto-rows:min-content;gap:8px}
 .zonelist button{display:grid;justify-items:start;gap:2px;min-height:64px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;font-size:16px;font-weight:600;text-align:left}
 .zonelist button small{font:400 13px var(--f-ui);color:var(--muted)}
+.zonelist button small.zbcat{font-weight:600;color:var(--accent)}
 .zonelist button.hasHit{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .list{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:16px}
@@ -567,7 +569,7 @@ html[data-device="phone"] .xhead{width:100%;display:grid;grid-template-columns:a
           <li><span>2</span><div><b>Customer stalls &amp; pad aprons.</b> Push straight out into the front aisle before anyone parks.</div></li>
           <li><span>3</span><div><b>West side aisle.</b> Start below the dumpster, push south into the front aisle.</div></li>
           <li><span>4</span><div><b>Front aisle, west half.</b> Service door → east, then turn through the empty customer stalls onto the front grass (Pile B). Keep it low.</div></li>
-          <li><span>5</span><div><b>Front aisle, east half.</b> Front Pad → past Zone 1, turn up the truck aisle to the back corner (Pile A).</div></li>
+          <li><span>5</span><div><b>Front aisle, east half.</b> Front Pad → past Zone 1, turn up the east aisle in front of Z7 to the back corner (Pile A).</div></li>
           <li><span>6</span><div><b>Z3 / Z4 aisle.</b> West → east, then up to Pile A.</div></li>
           <li><span>7</span><div><b>Z5 / Z6 aisle.</b> West → east into Pile A.</div></li>
           <li><span>8</span><div><b>Hand finish.</b> Shovel or blow the main doors, side entrance, service door, Sidewalk pad and around the signs. A V can't back-drag.</div></li>
@@ -792,20 +794,20 @@ const ZONES = [
     [1356,680,26,44,0,6],[1385,680,26,44,0,7],[1414,680,26,44,0,8],[1282,700,28,46,0,5]]},
   // Front of the building
   // Sidewalk display pad: one straight row of 6, no angles, each car lined up with the parking stall in front of it.
-  {id:"Z11",n:6, x:1356, y:752, w:164, h:76, lbl:"top", lblAt:[1438,760], name:"SIDEWALK", area:"Display pad · lined up with the stalls in front",
+  {id:"Z11",n:6, x:1356, y:752, w:164, h:76, lbl:"top", lblAt:[1438,756], name:"SIDEWALK", cat:"FORD", area:"Ford display · lined up with the stalls in front",
    cells:Array.from({length:6},(_,k)=>[1356+k*164/6,776,164/6,50,0])},
-  {id:"Z10",n:3,  x:1268, y:858, w:82,  h:46, lbl:"below", name:"FRONT PAD", area:"Canopy wedge"},
+  {id:"Z10",n:3,  x:1268, y:858, w:82,  h:46, lbl:"below", name:"FRONT PAD", cat:"LINCOLN", area:"Lincoln display · canopy wedge"},
   // Ford pylon island (gravel): two cars, both west (left) of the pole
   {id:"Z9", n:2,  x:1283, y:994, w:50,  h:46, lbl:"below", name:"FORD SIGN", area:"Ford sign island · left of the pole", cells:[
     [1284,995,22,44,0],[1308,995,22,44,0]]},
-  {id:"Z1", n:15, x:1362, y:962, w:380, h:54, lbl:"top", name:"ZONE 1", area:"Front row"},
+  {id:"Z1", n:15, x:1362, y:962, w:380, h:54, lbl:"top", name:"ZONE 1", cat:"TRUCKS", area:"Trucks · Ford, Chevy, Dodge"},
   // East lot
   {id:"Z6", n:8,  x:1586, y:486, w:218, h:50, lbl:"below", area:"East lot · along the wall"},
-  {id:"Z5", n:7,  x:1596, y:602, w:180, h:50, lbl:"left", area:"East lot"},
-  {id:"Z4", n:7,  x:1596, y:652, w:180, h:50, lbl:"left", area:"East lot"},
-  {id:"Z3", n:7,  x:1596, y:772, w:180, h:50, lbl:"left", area:"East lot"},
-  {id:"Z2", n:7,  x:1596, y:822, w:180, h:50, lbl:"left", area:"East lot"},
-  {id:"Z7", n:16, dir:"v", x:1846, y:612, w:64, h:388, lbl:"top", name:"Z7 TRUCKS", area:"Truck line"},
+  {id:"Z5", n:7,  x:1596, y:602, w:180, h:50, lbl:"left", cat:"SMALL FORDS", area:"Small Fords"},
+  {id:"Z4", n:7,  x:1596, y:652, w:180, h:50, lbl:"left", cat:"LINCOLN · BMW", area:"Lincoln & BMW"},
+  {id:"Z3", n:7,  x:1596, y:772, w:180, h:50, lbl:"left", cat:"JEEP", area:"Jeeps"},
+  {id:"Z2", n:7,  x:1596, y:822, w:180, h:50, lbl:"left", cat:"EXPLORER · BRONCO", area:"Explorers & Broncos"},
+  {id:"Z7", n:16, dir:"v", x:1846, y:612, w:64, h:388, lbl:"top", name:"Z7", cat:"OTHER MAKES", area:"Other makes · Nissan, Toyota, Subaru & more"},
   // Lincoln monument sign on a grass island: 1 = behind the sign (north), 2 = in front of it (toward Route 63)
   {id:"Z12",n:2,  x:1806, y:1006, w:104, h:86, lbl:"left", name:"LINCOLN SIGN", area:"Lincoln sign island · behind & in front", cells:[
     [1830,1008,54,26,0],[1830,1064,54,26,0]]},
@@ -899,11 +901,11 @@ function spotGeom(z,k){
 // laid out yet (measure returns 0), fall back to an estimate so a bubble is never too small.
 const TAGS=[];
 function sizeTag(o){
-  let w=0; try{w=o.t.getComputedTextLength()}catch(e){}
-  const est=o.t.textContent.length*9.6;
-  const tw=Math.max(w,est*0.8)+18;
+  let w=0,ws=0; try{w=o.t.getComputedTextLength();if(o.s)ws=o.s.getComputedTextLength()}catch(e){}
+  const est=o.t.textContent.length*9.6, ests=o.s?o.s.textContent.length*7:0;
+  const tw=Math.max(w,est*0.8,ws,ests*0.8)+18;
   const cx=o.anchor==="end"?o.x-tw/2:o.anchor==="start"?o.x+tw/2:o.x;
-  o.t.setAttribute("x",cx); o.r.setAttribute("x",cx-tw/2); o.r.setAttribute("width",tw);
+  o.t.setAttribute("x",cx); if(o.s)o.s.setAttribute("x",cx); o.r.setAttribute("x",cx-tw/2); o.r.setAttribute("width",tw);
 }
 function sizeTags(){TAGS.forEach(sizeTag)}
 // Floor plan inside the building, traced from interior photos: the service shop across the back
@@ -1214,10 +1216,11 @@ function drawMap(){
    {const t=el("text",{x:1300,y:1118,class:"pno"},P);t.textContent="NO SNOW INTO ROUTE 63";}
   }
   // zone labels + tap targets
-  function tag(x,cy,text,anchor,cls){
-    const H=22,g=el("g",{class:cls||"ztag"},svg),r=el("rect",{rx:5,height:H,y:cy-H/2},g);
-    const t=el("text",{class:"zlabel",y:cy+5.5,"text-anchor":"middle"},g);t.textContent=text;
-    TAGS.push({t,r,x,anchor}); sizeTag(TAGS[TAGS.length-1]);
+  function tag(x,cy,text,anchor,cls,sub){
+    const H=sub?36:22,g=el("g",{class:cls||"ztag"},svg),r=el("rect",{rx:5,height:H,y:cy-H/2},g);
+    const t=el("text",{class:"zlabel",y:sub?cy-1.5:cy+5.5,"text-anchor":"middle"},g);t.textContent=text;
+    let s=null; if(sub){s=el("text",{class:"zcat",y:cy+11.5,"text-anchor":"middle"},g);s.textContent=sub}
+    TAGS.push({t,s,r,x,anchor}); sizeTag(TAGS[TAGS.length-1]);
   }
   ZONES.forEach(z=>{
     const b=zoneBox(z), name=z.name||z.id;
@@ -1230,11 +1233,11 @@ function drawMap(){
       });
     }
     // zone name as a small tag: text sits on a card so it reads cleanly over any background
-    const G=12+(z.lbl==="top"?(z.lblGap||0):0), H=22, cy=z.lbl==="below"?b.y+b.h+G+H/2:z.lbl==="top"?b.y-G-H/2+2:b.y+b.h/2;
-    if(z.lblAt)tag(z.lblAt[0],z.lblAt[1],name,"middle");
-    else if(z.lbl==="left")tag(b.x-G,cy,name,"end");
-    else if(z.lbl==="right")tag(b.x+b.w+G,cy,name,"start");
-    else tag(b.x+b.w/2,cy,name,"middle");
+    const G=12+(z.lbl==="top"?(z.lblGap||0):0), H=z.cat?36:22, cy=z.lbl==="below"?b.y+b.h+G+H/2:z.lbl==="top"?b.y-G-H/2+2:b.y+b.h/2;
+    if(z.lblAt)tag(z.lblAt[0],z.lblAt[1],name,"middle",null,z.cat);
+    else if(z.lbl==="left")tag(b.x-G,cy,name,"end",null,z.cat);
+    else if(z.lbl==="right")tag(b.x+b.w+G,cy,name,"start",null,z.cat);
+    else tag(b.x+b.w/2,cy,name,"middle",null,z.cat);
   });
   ZONES.forEach(z=>{
     const b=zoneBox(z);
@@ -1256,7 +1259,7 @@ function buildZoneList(){
   const box=$("zonelist"); box.innerHTML="";
   ZONES.forEach(z=>{
     const b=document.createElement("button"); b.type="button";
-    b.innerHTML=`${z.name||z.id}<small id="zc-${z.id}"></small>`;
+    b.innerHTML=`${z.name||z.id}${z.cat?`<small class="zbcat">${esc(z.area.split(" · ")[0])}</small>`:""}<small id="zc-${z.id}"></small>`;
     b.onclick=()=>zoomTo(z); z.btn=b; box.appendChild(b);
   });
 }
