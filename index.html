@@ -88,6 +88,9 @@ svg text{font-family:var(--f-ui)}
 .mapwrap.full .zonehit{display:none}
 .zlabel{font-weight:600;fill:var(--ink);font-size:14px;letter-spacing:.02em;pointer-events:none}
 .zcat{font-weight:700;fill:var(--accent);font-size:10px;letter-spacing:.07em;pointer-events:none}
+.zbig{font-weight:900;fill:#fff;stroke:#16191c;stroke-width:2.4px;paint-order:stroke;stroke-linejoin:round;letter-spacing:.05em;pointer-events:none;opacity:.92}
+.mapwrap.full .zbig{opacity:.3}
+.mapwrap.nolabels .zbig{display:none}
 .ztag rect{fill:var(--surface);opacity:.94}
 .ztag{pointer-events:none}
 .evtag rect{fill:var(--ev);opacity:1}
@@ -794,7 +797,7 @@ const ZONES = [
     [1356,680,26,44,0,6],[1385,680,26,44,0,7],[1414,680,26,44,0,8],[1282,700,28,46,0,5]]},
   // Front of the building
   // Sidewalk display pad: one straight row of 6, no angles, each car lined up with the parking stall in front of it.
-  {id:"Z11",n:6, x:1356, y:752, w:164, h:76, lbl:"top", lblAt:[1438,756], name:"SIDEWALK", cat:"FORD", area:"Ford display · lined up with the stalls in front",
+  {id:"Z11",n:6, x:1356, y:752, w:164, h:76, lbl:"top", lblAt:[1438,760], name:"SIDEWALK", cat:"FORD", area:"Ford display · lined up with the stalls in front",
    cells:Array.from({length:6},(_,k)=>[1356+k*164/6,776,164/6,50,0])},
   {id:"Z10",n:3,  x:1268, y:858, w:82,  h:46, lbl:"below", name:"FRONT PAD", cat:"LINCOLN", area:"Lincoln display · canopy wedge"},
   // Ford pylon island (gravel): two cars, both west (left) of the pole
@@ -1174,6 +1177,17 @@ function drawMap(){
       z.spots.push(s);
     }
   });
+  // what parks here, written big right across each row (like the paper lot sheet); taps pass through to the spots
+  ZONES.forEach(z=>{
+    if(!z.cat)return;
+    let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
+    for(let k=0;k<z.n;k++){const g=spotGeom(z,k);x0=Math.min(x0,g.x);y0=Math.min(y0,g.y);x1=Math.max(x1,g.x+g.w);y1=Math.max(y1,g.y+g.h)}
+    const vert=(y1-y0)>(x1-x0)*1.6, L=vert?y1-y0:x1-x0, T=vert?x1-x0:y1-y0, cx=(x0+x1)/2, cy=(y0+y1)/2;
+    const one=[z.cat], two=z.cat.split(" · "), fit=lines=>Math.min(T*(lines.length>1?0.4:0.6),(L-8)/(Math.max(...lines.map(l=>l.length))*0.66));
+    const lines=two.length>1&&fit(two)>fit(one)?two:one, fs=fit(lines);
+    const t=el("text",{class:"zbig","text-anchor":"middle",style:`font-size:${fs.toFixed(1)}px`,transform:vert?`rotate(-90 ${cx} ${cy})`:""},svg);
+    lines.forEach((ln,i)=>{const sp=el("tspan",{x:cx,y:cy+fs*0.36+(i-(lines.length-1)/2)*fs*1.02},t);sp.textContent=ln});
+  });
   // sign faces sit above the cars so they stay visible
   {const SG=el("g",{class:"lm"},svg);
    el("circle",{cx:1333.5,cy:1031,r:2.2,fill:"var(--wall)",stroke:"var(--ink)","stroke-width":.6},SG);   // pylon pole
@@ -1233,11 +1247,11 @@ function drawMap(){
       });
     }
     // zone name as a small tag: text sits on a card so it reads cleanly over any background
-    const G=12+(z.lbl==="top"?(z.lblGap||0):0), H=z.cat?36:22, cy=z.lbl==="below"?b.y+b.h+G+H/2:z.lbl==="top"?b.y-G-H/2+2:b.y+b.h/2;
-    if(z.lblAt)tag(z.lblAt[0],z.lblAt[1],name,"middle",null,z.cat);
-    else if(z.lbl==="left")tag(b.x-G,cy,name,"end",null,z.cat);
-    else if(z.lbl==="right")tag(b.x+b.w+G,cy,name,"start",null,z.cat);
-    else tag(b.x+b.w/2,cy,name,"middle",null,z.cat);
+    const G=12+(z.lbl==="top"?(z.lblGap||0):0), H=22, cy=z.lbl==="below"?b.y+b.h+G+H/2:z.lbl==="top"?b.y-G-H/2+2:b.y+b.h/2;
+    if(z.lblAt)tag(z.lblAt[0],z.lblAt[1],name,"middle");
+    else if(z.lbl==="left")tag(b.x-G,cy,name,"end");
+    else if(z.lbl==="right")tag(b.x+b.w+G,cy,name,"start");
+    else tag(b.x+b.w/2,cy,name,"middle");
   });
   ZONES.forEach(z=>{
     const b=zoneBox(z);
