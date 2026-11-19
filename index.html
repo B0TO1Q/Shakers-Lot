@@ -1086,17 +1086,17 @@ function drawMap(){
   // dumpster at the west end of Z6
   el("rect",{x:1528,y:496,width:50,height:30,rx:3,class:"dumpster"},svg);
   T(1553,515,"DUMPSTER","dumpster-t",{"text-anchor":"middle"});
-  // customer parking in front of the showroom: painted stalls, accessible stalls with
-  // hatched aisles flanking the walk to the entrance (signs on posts at the glass)
+  // customer parking in front of the showroom: 2 ADA stalls, the hatched walk to the main
+  // entrance (2 stalls wide), 1 ADA stall, then plain stalls (checked on the lot Nov 19)
   {const CP=el("g",{class:"lm"},svg), x0=964, y0=856, sw=29.6, n=10;
-   for(let i=0;i<=n;i++)el("line",{x1:x0+i*sw,y1:y0,x2:x0+i*sw,y2:y0+56,stroke:"var(--surface)","stroke-width":2,opacity:.85},CP);
+   for(let i=0;i<n;i++)el("line",{x1:x0+i*sw,y1:y0,x2:x0+i*sw,y2:y0+56,stroke:"var(--surface)","stroke-width":2,opacity:.85},CP);
    const hatch=i=>{const x=x0+i*sw;el("rect",{x:x+2,y:y0+2,width:sw-4,height:52,fill:"url(#adaHatch)"},CP)};
    const ada=i=>{const x=x0+i*sw+sw/2;el("rect",{x:x-6,y:y0+22,width:12,height:12,rx:2,fill:"#1f5fa8"},CP);
      el("circle",{cx:x+.6,cy:y0+24.6,r:1.3,fill:"#fff"},CP);                                   // accessible-parking pictogram
      el("path",{d:`M${x} ${y0+26.4} V${y0+29.4} H${x+3} L${x+3.8} ${y0+32}`,fill:"none",stroke:"#fff","stroke-width":1.1,"stroke-linecap":"round","stroke-linejoin":"round"},CP);
      el("path",{d:`M${x-1.4} ${y0+28.2} A3.1 3.1 0 1 0 ${x+2.4} ${y0+31.6}`,fill:"none",stroke:"#fff","stroke-width":1},CP);
      el("rect",{x:x-1,y:y0-6,width:2,height:6,fill:"var(--muted)"},CP)};
-   hatch(4);ada(3);ada(5); hatch(8);ada(7); ada(9);
+   ada(2);ada(3);hatch(4);hatch(5);ada(6);          // 2 ADA, walk to the main entrance, 1 ADA; no stall at the east end
    T(1050,940,"CUSTOMER PARKING","zcount",{"text-anchor":"middle"});}
   // Unlabeled stalls (not inventory): 6 employee/customer stalls in front of the Sidewalk pad, and the
   // 10-stall front row west of the Ford sign (customers and outgoing vehicles)
